@@ -10,7 +10,7 @@
       </div>
       <div class="body">
         <div class="icon">
-          <i class="el-icon-loading"></i>
+          <img src="../../assets/timg.png" alt="logo">
         </div>
 
         <el-form ref="form" :model="form" label-width="40px">
@@ -20,10 +20,10 @@
           <el-form-item label="密码">
             <el-input type="password" v-model="form.password"></el-input>
           </el-form-item>
-          <el-form-item>
-            <el-checkbox-group v-model="form.rememberMe">
+          <el-form-item align="left">
+            <!--<el-checkbox-group v-model="form.rememberMe">-->
               <el-checkbox label="记住我" name="type"></el-checkbox>
-            </el-checkbox-group>
+            <!--</el-checkbox-group>-->
             <!--<span>记住我</span>-->
             <el-button type="primary" @click="login()">登 陆</el-button>
           </el-form-item>
@@ -57,7 +57,16 @@
         window.open("http://localhost:8080/#/register", "_blank");
         this.$message.success("注册成功");
       }
+    },
+    watch: {
+     form: function(val){
+       console.log(val);
+       if(!val) return;
+      if(!/^\d*\.?\d{0,2}$/.test(val.name)){
+        return ''
+      }
     }
+  }
   }
 </script>
 
@@ -77,7 +86,7 @@
     color: #858585;
     border-radius: 6px;
 
-    height: 533px;
+    height: 560px;
     width: 400px;
     margin: 100px auto;
     z-index: 1000;
@@ -89,11 +98,11 @@
   }
   .body .icon{
     text-align: center;
-    margin-bottom: 30px;
   }
-  .body .icon .el-icon-loading{
-    width: 100px;
-    height: 100px;
+  .body .icon img{
+    width: 240px;
+    height: 240px;
+    -webkit-user-drag: none;
   }
 
   .body .title{
@@ -112,7 +121,6 @@
     border: none;
     width: 90%;
     border-bottom: 1px #bfbfbf4a solid;
-    margin-bottom: 50px;
   }
 
   .foot {
