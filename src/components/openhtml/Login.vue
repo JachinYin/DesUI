@@ -55,7 +55,7 @@
       },
       register: function () {
         window.open("http://localhost:8080/#/register", "_blank");
-        this.$message.success("注册成功")
+        this.$message.success("注册成功");
       }
     }
   }

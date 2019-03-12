@@ -1,7 +1,9 @@
 <template>
   <div class="cashRec">
     <div class="header"><Logout/></div>
-    <div class="main"></div>
+    <div class="main">
+      
+    </div>
   </div>
 </template>
 
