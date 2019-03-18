@@ -1,28 +1,29 @@
 <template>
-  <div class="login">
+  <div style="background: #f2f2f2">
     <div class="login_box">
-      <div class="body">
+      <div class="head">
           <span class="title">
                 <span style="color:#2b89fb;">▌</span> 登陆
             <!--<span class="close_btn" @click="isLoginVisible = !isLoginVisible">&#10006</span>-->
           </span>
         <hr>
       </div>
-      <div class="body">
+      <div class="container">
         <div class="icon">
           <img src="../../assets/timg.png" alt="logo">
+
         </div>
 
         <el-form ref="form" :model="form" label-width="40px">
-          <el-form-item label="账户">
+          <el-form-item label="账户" @keyup.enter.native="login()">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" @keyup.enter.native="login()">
             <el-input type="password" v-model="form.password"></el-input>
           </el-form-item>
-          <el-form-item align="left">
+          <el-form-item>
             <!--<el-checkbox-group v-model="form.rememberMe">-->
-              <el-checkbox label="记住我" name="type"></el-checkbox>
+            <el-checkbox label="记住我" v-model="form.rememberMe"></el-checkbox>
             <!--</el-checkbox-group>-->
             <!--<span>记住我</span>-->
             <el-button type="primary" @click="login()">登 陆</el-button>
@@ -41,8 +42,8 @@
     data(){
       return{
         form:{
-          name: '',
-          password: '',
+          name: 'jachin',
+          password: '123123',
           rememberMe: false,
         },
         isLoginVisible: false
@@ -50,74 +51,100 @@
     },
     methods:{
       login: function () {
-        this.$message.success("成功");
-        console.log(this.form);
+        // this.$message.success("成功");
+        // console.log(this.form);
+        if(this.form.name === ''){
+          this.$message.warning("输入用户名");
+          return;
+        }
+        if(this.form.password === ''){
+          this.$message.success("输入密码");
+          return;
+        }
+
+        let thiz = this;
+        $.ajax({
+          url: thiz.preUrl + 'login',
+          data:{
+            name: thiz.form.name,
+            password: thiz.form.password,
+            rememberMe: thiz.form.rememberMe,
+          },
+          success: function (res) {
+            // 成功登陆
+            if(res.success){
+
+              thiz.$router.push("/tempList");
+              console.log(document.cookie);
+            }
+            // 登陆失败
+            else{
+              thiz.$message.error(res.msg);
+            }
+          },
+          error: function (res) {
+            // thiz.$message.error("服务繁忙，请稍后重试");
+            thiz.$message.error(res.msg + "233");
+            console.log(res);
+          }
+        })
+
       },
       register: function () {
-        window.open("http://localhost:8080/#/register", "_blank");
-        this.$message.success("注册成功");
+        this.$router.push("/register")
       }
     },
-    watch: {
-     form: function(val){
-       console.log(val);
-       if(!val) return;
-      if(!/^\d*\.?\d{0,2}$/.test(val.name)){
-        return ''
+    created() {
+      let TOKEN = this.$CommTool.getCookie("TOKEN");
+      if(TOKEN !== ""){
+        this.$router.push("/tempList");
       }
     }
-  }
   }
 </script>
 
 <style scoped>
-  .login{
-    height: 100%;
-    width: 100%;
-    /*background: #f2f2f2;*/
-    position: absolute;
-    left: 0;
-  }
   .login_box{
     position: relative;
+    top: 100px;
     text-align: center;
-    background: white;
+    background: #fafafa;
     /*background: linear-gradient(to bottom right, rgba(250, 251, 255, 1), #7cc2ff); !* 标准的语法（必须放在最后） *!*/
     color: #858585;
     border-radius: 6px;
 
     height: 560px;
     width: 400px;
-    margin: 100px auto;
+    margin: auto;
     z-index: 1000;
     box-shadow:0 0 10px #858585;
     padding-top: 1px;
   }
-  .body{
+  .container{
     text-align: left;
   }
-  .body .icon{
+  .container .icon{
     text-align: center;
   }
-  .body .icon img{
+  .container .icon img{
     width: 240px;
     height: 240px;
     -webkit-user-drag: none;
   }
 
-  .body .title{
+  .head .title{
     display: block;
     text-align: left;
     margin: 15px 25px;
     height: 25px;
     font-size: 18px;
   }
-  .body .close_btn{
+  .head .close_btn{
     float: right;
     padding-right: 10px;
     cursor: pointer;
   }
-  .body hr{
+  .head hr{
     border: none;
     width: 90%;
     border-bottom: 1px #bfbfbf4a solid;
@@ -131,6 +158,10 @@
   .foot .reg{
     color: #409EFF;
     cursor: pointer;
+  }
+
+  .mask{
+    background-color: rgba(143, 143, 143, 0.64);
   }
 
   .el-form{

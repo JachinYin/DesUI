@@ -1,6 +1,9 @@
 <template>
     <div class="navigation">
-      <span class="title"><img src="../../assets/logo.png" alt="logo" width="20px" height="20px">设计师中心</span>
+      <span class="title">
+        <img src="../../assets/logo.png" alt="logo" width="80px">
+        <span class="title">设计师中心</span>
+      </span>
       <span v-for="(item, index) in navList" :class="'nav '+ item.flag" @click="check(item.url, index)">
         <i :class="item.icon"></i>
         {{item.name}}
@@ -56,8 +59,12 @@
   .title {
     display: block;
     line-height: 20px;
-    margin:  25px 0;
-    font-size: 20px;
+    margin:  12px 0;
+    font-size: 22px;
+    color: rgba(247, 247, 247);
+  }
+  img{
+    position: relative;
   }
 
   .active{
