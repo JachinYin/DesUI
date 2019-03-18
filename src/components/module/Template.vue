@@ -24,19 +24,26 @@
         <Logout/>
       </div>
       <div class="main">
-        <div class="item">
-          <div class="icon_add">
-            <i class="el-icon-plus"></i>
-          </div>
-          <span >
-        <i class="el-icon-edit"></i>创建模板</span>
+        <div class="item" @click="test">
+          <img src="" alt="">
+          <!--<div class="icon_add">-->
+            <!--<i class="el-icon-plus"></i>-->
+          <!--</div>-->
+          <!--<span>-->
+            <!--<i class="el-icon-edit"></i>创建模板-->
+          <!--</span>-->
+        </div>
+        <!--<div class="item"></div>-->
+        <div class="item" v-for="(item, index) in tempList">
+          <!--<span>{{item.title}}</span>-->
+          <img :src="item.imgUrl" alt="">
         </div>
       </div>
     </div>
 </template>
 
 <script>
-    import Logout from "@/components/inc/Logout";
+    import Logout from "../../components/inc/Logout";
     export default {
       name: "Template",
       components: {Logout},
@@ -45,8 +52,53 @@
           time: '修改时间',
           status: '全部',
           desc: '降序',
-          form:{}
+          form:{},
+          tempList: [],
         }
+      },
+      methods:{
+        refreshTabData: function () {
+          let thiz = this;
+          let form = thiz.form;
+          $.ajax({
+            url: thiz.preUrl + "getTemplateList",
+            type: 'get',
+            data: {
+              designer: form.designer,
+              status: form.status,
+              tempId: form.tempId || 0,
+              time: form.time,
+              title: form.title,
+              aid: 1,
+            },
+            success: function (res) {
+              console.log(res);
+              if (res.success) {
+                let data = res.data;
+                thiz.tempList = data.list;
+                // thiz.page.total = thiz.templateList.length;
+                thiz.isLoad = false;
+              } else {
+                if (res.code === 101){
+                  thiz.$router.push('/login');
+                  return;
+                }
+                thiz.$message.error(res.msg);
+              }
+            },
+            error: function (data) {
+              thiz.$message.error('【模板审核表】服务繁忙，请稍后重试');
+            }
+          });
+        },
+
+        test: function () {
+          console.log("fas");
+          this.refreshTabData()
+        }
+      },
+      created() {
+        this.refreshTabData();
       }
     }
 </script>
@@ -78,9 +130,6 @@
    color: black;
    outline: black;
  }
- .search select:hover{
-   color: #2b89fb;
- }
   /*头部排序===end*/
 
   /*创建模板内容===start*/
@@ -95,6 +144,7 @@
     user-select: none;
     padding-top: 1px;
     margin: 10px 20px;
+    display: inline-block;
   }
   .item:hover{
     color: #2b89fb;
@@ -113,5 +163,9 @@
  .item:hover .icon_add{
     border: 1px #2b89fb dashed;
   }
+
+ .item img{
+   width: 180px;
+ }
  /*创建模板内容===end*/
 </style>
