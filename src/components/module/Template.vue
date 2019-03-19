@@ -24,36 +24,40 @@
         <Logout/>
       </div>
       <div class="main">
-        <div class="item" @click="test">
-          <img src="" alt="">
-          <!--<div class="icon_add">-->
-            <!--<i class="el-icon-plus"></i>-->
-          <!--</div>-->
-          <!--<span>-->
-            <!--<i class="el-icon-edit"></i>创建模板-->
-          <!--</span>-->
+        <div class="content">
+          <div class="item" @click="createTemplate">
+            <img src="../../assets/create1.png" alt="">
+            <span>
+              <i class="el-icon-edit"></i>创建模板
+            </span>
+          </div>
+          <div class="item" v-for="(item, index) in tempList" @click="editTemplate(index)">
+            <!--<span>{{item.title}}</span>-->
+            <img :src="item.imgUrl" alt="">
+            <span>{{item.title}}</span>
+          </div>
+
         </div>
-        <!--<div class="item"></div>-->
-        <div class="item" v-for="(item, index) in tempList">
-          <!--<span>{{item.title}}</span>-->
-          <img :src="item.imgUrl" alt="">
-        </div>
+        <EditTemplate :is-visible="isEditBoxVisible" :tempData="editTempData" @closeBox="closeEditTemplateBox"/>
       </div>
     </div>
 </template>
 
 <script>
     import Logout from "../../components/inc/Logout";
+    import EditTemplate from "@/components/openhtml/EditTemplate";
     export default {
       name: "Template",
-      components: {Logout},
+      components: {EditTemplate, Logout},
       data: function () {
         return{
+          isEditBoxVisible : false,
           time: '修改时间',
           status: '全部',
           desc: '降序',
           form:{},
           tempList: [],
+          editTempData: 0,
         }
       },
       methods:{
@@ -92,9 +96,16 @@
           });
         },
 
-        test: function () {
+        createTemplate: function () {
           console.log("fas");
           this.refreshTabData()
+        },
+        editTemplate: function (index) {
+          this.editTempData = this.tempList[index];
+          this.isEditBoxVisible = true;
+        },
+        closeEditTemplateBox: function () {
+          this.isEditBoxVisible = false;
         }
       },
       created() {
@@ -132,28 +143,36 @@
  }
   /*头部排序===end*/
 
+ .main .content{
+   /*display: grid;*/
+   overflow-y: auto;
+   /*height: calc(100% - 900px);*/
+   height: 600px;
+ }
+
+
+
   /*创建模板内容===start*/
   .item{
     width: 180px;
-    height: 240px;
+    height: 275px;
     background: white;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     text-align: center;
     cursor: pointer;
     user-select: none;
-    padding-top: 1px;
-    margin: 10px 20px;
+    margin: 15px 20px;
     display: inline-block;
   }
   .item:hover{
     color: #2b89fb;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 12px 0 rgba(0, 0, 0, 0.2);
   }
   .item .icon_add{
     width: 64px;
     height: 64px;
-    margin: 60px auto 18px;
+    margin: 100px auto 18px;
     border-radius: 50%;
     border: 1px #909399 dashed;
     font-size: 25px;
@@ -165,7 +184,15 @@
   }
 
  .item img{
+   height: 240px;
    width: 180px;
+ }
+ .item span{
+    line-height: 30px;
+ }
+
+ .hover_edit{
+   display: block;
  }
  /*创建模板内容===end*/
 </style>
