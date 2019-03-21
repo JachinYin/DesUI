@@ -2,26 +2,35 @@
   <div class="editTemplate openHtml" v-if="isVisible">
     <div class="body">
       <div class="header">
-        <span class="title">编 辑 模 板</span>
+        <div class="title">
+          <span style="margin-right: 50px">编 辑 模 板</span>
+          <span>审 核 记 录</span>
+        </div>
         <span class="close_btn">&#10006;</span>
       </div>
       <div class="container">
-        <div>
+        <div class="pic">
           <img :src="tempData.imgUrl" alt="">
+          <span v-if="!tempData.imgUrl">请设置封面图</span>
+          <span v-else>更换封面图</span>
         </div>
         <div class="content">
           <div class="item">
             <span class="keyClass">标题</span>
-            <span class="valClass">{{tempData.title}}</span></div>
+            <span class="valClass"><input type="text" :value="tempData.title"></span>
+          </div>
           <div class="item">
             <span class="keyClass">关键词</span>
-            <span class="valClass">{{tempData.keyWd}}</span></div>
+            <span class="valClass"><input type="text" :value="tempData.keyWd"></span>
+          </div>
           <div class="item">
             <span class="keyClass">行业信息</span>
-            <span class="valClass">{{tempData.info}}</span></div>
+            <span class="valClass"><input type="text" :value="tempData.info"></span>
+          </div>
           <div class="item">
             <span class="keyClass">内容</span>
-            <span class="valClass">{{tempData.content}}</span></div>
+            <span class="valClass"><textarea :value="tempData.content"></textarea></span>
+          </div>
         </div>
       </div>
       <div class="footer">
@@ -58,6 +67,7 @@
    height: 50px;
  }
  .header  .title{
+   display: inline-block;
    line-height: 50px;
    /*font-weight: bold;*/
    font-size: 20px;
@@ -74,10 +84,20 @@
     height: 440px;
     overflow-y: auto;
   }
+  .container .pic{
+    width: 180px;
+    height: 250px;
+    margin: auto;
+  }
   .container img{
     width: 180px;
+    height: 250px;
+    /*border: 1px black solid;*/
   }
 
+  .content{
+    margin-top: 30px;
+  }
 
  .item{
    margin: 10px 10px;
@@ -97,7 +117,41 @@
    display: inline-block;
    width: 275px;
  }
-
+ .item .valClass input{
+   display: inline-block;
+   /*height: 30px;*/
+   padding: 0 15px;
+   line-height: 28px;
+   font-size: 18px;
+   border-radius: 25px 4px 25px 25px;
+   border: 1px #cfcfcf solid;
+   color: #666666;
+   width: 300px;
+   /*background: #f2f2f2;*/
+ }
+ .item .valClass input:focus{
+   outline: none;
+   border: 2px #b5b5b5 solid;
+   border-radius: 25px 4px 25px 25px;
+ }
+ .item .valClass textarea{
+   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+   color: #666666;
+   width: 245px;
+   max-width: 300px;
+   min-width: 300px;
+   max-height: 400px;
+   min-height: 80px;
+   padding: 5px 15px;
+   line-height: 28px;
+   font-size: 18px;
+   border-radius: 6px;
+ }
+ .item .valClass textarea:focus{
+   outline: none;
+   border: 2px #b5b5b5 solid;
+   border-radius: 6px;
+ }
 
   .footer{
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
