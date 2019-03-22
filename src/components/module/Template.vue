@@ -31,27 +31,41 @@
               <i class="el-icon-edit"></i>创建模板
             </span>
           </div>
-          <div class="item" v-for="(item, index) in tempList" @click="editTemplate(index)">
-            <!--<span>{{item.title}}</span>-->
+          <div class="item" v-for="(item, index) in tempList"@mouseover="hoverItem(index)" @mouseleave="leaveItem(index)">
             <img :src="item.imgUrl" alt="">
-            <span>{{item.title}}</span>
+
+            <span class="btn" :id="item.tempId + '_e'" @click="templateEdit(index)" >
+              <span class="toolTip">编辑</span>
+              <i class="el-icon-edit-outline"></i>
+            </span>
+
+            <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-if="item.title.length<6">{{item.title}}</span>
+            <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-else>{{item.title.slice(0,5)}}...</span>
+
+            <span class="btn" :id="item.tempId + '_c'" @click="templateAudit(index)">
+              <i class="el-icon-document"></i>
+              <span class="toolTip">审核</span>
+            </span>
           </div>
 
         </div>
-        <EditTemplate :is-visible="isEditBoxVisible" :tempData="editTempData" @closeBox="closeEditTemplateBox"/>
+        <TemplateEdit :is-visible="isEditBoxVisible" :tempData="editTempData" @closeBox="closeTemplateEditBox"/>
+        <TemplateAudit :is-visible="isAuditBoxVisible" :tempData="editTempData" @closeBox="closeTemplateAuditBox"/>
       </div>
     </div>
 </template>
 
 <script>
     import Logout from "../../components/inc/Logout";
-    import EditTemplate from "@/components/openhtml/EditTemplate";
+    import TemplateEdit from "@/components/openhtml/TemplateEdit";
+    import TemplateAudit from "@/components/openhtml/TemplateAudit";
     export default {
       name: "Template",
-      components: {EditTemplate, Logout},
+      components: {TemplateAudit, TemplateEdit, Logout},
       data: function () {
         return{
           isEditBoxVisible : false,
+          isAuditBoxVisible : false,
           time: '修改时间',
           status: '全部',
           desc: '降序',
@@ -100,12 +114,35 @@
           console.log("fas");
           this.refreshTabData()
         },
-        editTemplate: function (index) {
+
+        templateEdit: function (index) {
           this.editTempData = this.tempList[index];
           this.isEditBoxVisible = true;
         },
-        closeEditTemplateBox: function () {
+        closeTemplateEditBox: function () {
           this.isEditBoxVisible = false;
+        },
+
+        templateAudit: function(index){
+          this.editTempData = this.tempList[index];
+          this.isAuditBoxVisible = true;
+        },
+        closeTemplateAuditBox: function () {
+          this.isAuditBoxVisible = false;
+        },
+
+        hoverItem: function (index) {
+          // alert(this.tempList[index]);
+          $("#" + this.tempList[index].tempId + '_e').css('display', 'inline-block');
+          $("#" + this.tempList[index].tempId + '_c').css('display', 'inline-block');
+          $("#" + this.tempList[index].tempId + '_s').text("│");
+        },
+        leaveItem: function (index) {
+          $("#" + this.tempList[index].tempId + '_e').css('display', 'none');
+          $("#" + this.tempList[index].tempId + '_c').css('display', 'none');
+          let title = this.tempList[index].title;
+          title = title.length < 6 ? title : (title.slice(0,5) + '...');
+          $("#" + this.tempList[index].tempId + '_s').text(title);
         }
       },
       created() {
@@ -160,39 +197,36 @@
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     text-align: center;
-    cursor: pointer;
     user-select: none;
     margin: 15px 20px;
     display: inline-block;
   }
   .item:hover{
-    color: #2b89fb;
+    /*color: #2b89fb;*/
     box-shadow: 4px 4px 12px 0 rgba(0, 0, 0, 0.2);
-  }
-  .item .icon_add{
-    width: 64px;
-    height: 64px;
-    margin: 100px auto 18px;
-    border-radius: 50%;
-    border: 1px #909399 dashed;
-    font-size: 25px;
-    font-weight: lighter;
-    line-height: 64px;
-  }
- .item:hover .icon_add{
-    border: 1px #2b89fb dashed;
   }
 
  .item img{
    height: 240px;
    width: 180px;
  }
- .item span{
-    line-height: 30px;
+ .item:hover  img{
+   /*width: 300px!important;*/
+   filter: blur(1px);
+ }
+ .item .btn{
+   display: none;
+   /*border: 1px #6666 solid;*/
+   line-height: 20px;
+   border-radius: 10%;
+   padding: 2px 4px;
+   cursor: pointer;
+   color: #545454;
+   background: #eaeaea;
+ }
+ .item .btn:hover{
+   opacity: 0.8;
  }
 
- .hover_edit{
-   display: block;
- }
  /*创建模板内容===end*/
 </style>

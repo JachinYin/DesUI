@@ -70,7 +70,7 @@
     border-radius: 6px;
 
     width: 600px;
-    height: 560px;
+    height: 567px;
     z-index: 1000;
 
     padding-top: 1px;

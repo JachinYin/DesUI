@@ -3,16 +3,15 @@
     <div class="body">
       <div class="header">
         <div class="title">
-          <span style="margin-right: 50px">编 辑 模 板</span>
-          <span>审 核 记 录</span>
+          <span style="padding-left: 26px">审 核 记 录</span>
         </div>
-        <span class="close_btn">&#10006;</span>
+        <span class="close_btn" @click="closeEditTemplateBox">&#10006;</span>
       </div>
       <div class="container">
         <div class="pic">
           <img :src="tempData.imgUrl" alt="">
-          <span v-if="!tempData.imgUrl">请设置封面图</span>
-          <span v-else>更换封面图</span>
+          <span class="btn" v-if="!tempData.imgUrl">请设置封面图</span>
+          <span class="btn" v-else>更换封面图</span>
         </div>
         <div class="content">
           <div class="item">
@@ -44,7 +43,7 @@
 
 <script>
     export default {
-      name: "EditTemplate",
+      name: "TemplateAudit",
       props: ["isVisible", "tempData"],
       data: function(){
         return{
@@ -64,6 +63,7 @@
 
 <style scoped>
  .header{
+   margin-top: 4px;
    height: 50px;
  }
  .header  .title{
@@ -93,6 +93,9 @@
     width: 180px;
     height: 250px;
     /*border: 1px black solid;*/
+  }
+  .container .btn{
+    cursor: pointer;
   }
 
   .content{
@@ -155,7 +158,7 @@
 
   .footer{
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    height: 50px;
+    height: 60px;
     padding: 10px;
   }
 </style>
