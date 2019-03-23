@@ -5,12 +5,17 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import './assets/icon/iconfont'
 
+import IconSvg from "./components/comm/IconSvg"
 
+// getCookie
 import CommTool from "./assets/CommJs";
 
+// 全局使用 Element
 Vue.use(ElementUI);
-
+// 全局注册图标
+Vue.component('icon', IconSvg);
 
 
 Vue.config.productionTip = false;

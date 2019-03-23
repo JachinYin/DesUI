@@ -5,7 +5,7 @@
         <span class="title">设计师中心</span>
       </span>
       <span v-for="(item, index) in navList" :class="'nav '+ item.flag" @click="check(item.url, index)">
-        <i :class="item.icon"></i>
+        <icon :i-class="item.icon"></icon>
         {{item.name}}
       </span>
     </div>
@@ -31,19 +31,19 @@
               name: '模板设计',
               flag: '',
               url: '/template',
-              icon: 'el-icon-edit-outline'
+              icon: 'logo1'
             },
             {
               name: '收支明细',
               flag: '',
               url: '/cashRecord',
-              icon: 'el-icon-document'
+              icon: 'balance'
             },
             {
               name: '个人资料',
               flag: '',
               url: '/myInfo',
-              icon: 'el-icon-setting'
+              icon: 'userInfo'
             }
           ];
           return this.navList;
