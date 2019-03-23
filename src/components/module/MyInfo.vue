@@ -1,7 +1,12 @@
 <template>
   <div class="myInfo">
     <div class="header"><Logout/></div>
-    <div class="main"></div>
+    <div class="main">
+
+      <input type="text" v-model="form.id">
+      <input type="text" v-model="form.name">
+
+    </div>
   </div>
 </template>
 
@@ -9,7 +14,15 @@
     import Logout from "@/components/inc/Logout";
     export default {
         name: "MyInfo",
-      components: {Logout}
+      components: {Logout},
+      data: function () {
+        return{
+          form:{
+            id: 0,
+            name: '',
+          }
+        }
+      }
     }
 </script>
 

@@ -9,32 +9,31 @@
       </div>
       <div class="container">
         <div class="pic">
-          <img :src="tempData.imgUrl" alt="">
-          <span class="btn" v-if="!tempData.imgUrl">请设置封面图</span>
+          <img :src="form.imgUrl" alt="">
+          <span class="btn" v-if="!form.imgUrl">请设置封面图</span>
           <span class="btn" v-else>更换封面图</span>
         </div>
         <div class="content">
           <div class="item">
             <span class="keyClass">标题</span>
-            <span class="valClass"><input type="text" :value="tempData.title"></span>
+            <span class="valClass"><input type="text" v-model="form.title"></span>
           </div>
           <div class="item">
             <span class="keyClass">关键词</span>
-            <span class="valClass"><input type="text" :value="tempData.keyWd"></span>
+            <span class="valClass"><input type="text" v-model="form.keyWd"></span>
           </div>
           <div class="item">
             <span class="keyClass">行业信息</span>
-            <span class="valClass"><input type="text" :value="tempData.info"></span>
+            <span class="valClass"><input type="text" v-model="form.info"></span>
           </div>
           <div class="item">
             <span class="keyClass">内容</span>
-            <span class="valClass"><textarea :value="tempData.content"></textarea></span>
+            <span class="valClass"><textarea v-model="form.content"></textarea></span>
           </div>
         </div>
       </div>
       <div class="footer">
-        <el-button type="primary" size="small">保存</el-button>
-        <!--<el-button  size="small"></el-button>-->
+        <el-button type="primary" size="small" @click="saveTemplate">保存</el-button>
       </div>
     </div>
     <div class="mask" @click="closeEditTemplateBox"></div>
@@ -47,6 +46,7 @@
       props: ["isVisible", "tempData"],
       data: function(){
         return{
+          form: {}
         }
       },
       methods:{
@@ -54,10 +54,47 @@
           this.$emit("closeBox");
         },
         refreshTempData: function () {
+        },
+
+        saveTemplate: function () {
+          let thiz = this;
+          $.ajax({
+            url:this.preUrl + 'setTemplate',
+            data:{
+              tempId : thiz.form.tempId,
+              title : thiz.form.title,
+              keyWd : thiz.form.keyWd,
+              info : thiz.form.info,
+              imgUrl : thiz.form.imgUrl,
+              content : thiz.form.content,
+            },
+            success: function (res) {
+              if(res.success){
+                thiz.$message.success(res.msg);
+                thiz.closeEditTemplateBox();
+              }
+              else{
+                thiz.$message.error(res.msg);
+              }
+            },
+            error: function () {
+              thiz.$message.error("网络繁忙，请稍后重试~");
+            }
+          })
         }
       },
-      created() {
-      },
+      watch:{
+        tempData(){
+          this.form = {
+            tempId : this.tempData.tempId,
+            title : this.tempData.title,
+            keyWd : this.tempData.keyWd,
+            info : this.tempData.info,
+            imgUrl : this.tempData.imgUrl,
+            content : this.tempData.content,
+          };
+        },
+      }
     }
 </script>
 
@@ -134,7 +171,7 @@
  }
  .item .valClass input:focus{
    outline: none;
-   border: 2px #b5b5b5 solid;
+   border: 1px #2b89fb solid;
    border-radius: 25px 4px 25px 25px;
  }
  .item .valClass textarea{
@@ -152,7 +189,7 @@
  }
  .item .valClass textarea:focus{
    outline: none;
-   border: 2px #b5b5b5 solid;
+   border: 1px #2b89fb solid;
    border-radius: 6px;
  }
 

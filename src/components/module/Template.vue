@@ -43,14 +43,14 @@
             <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-else>{{item.title.slice(0,5)}}...</span>
 
             <span class="btn" :id="item.tempId + '_c'" @click="templateAudit(index)">
-              <i class="el-icon-document"></i>
-              <span class="toolTip">审核</span>
+              <icon i-class="audit"></icon>
+              <span class="toolTip">提交</span>
             </span>
           </div>
 
         </div>
-        <TemplateEdit :is-visible="isEditBoxVisible" :tempData="editTempData" @closeBox="closeTemplateEditBox"/>
-        <TemplateAudit :is-visible="isAuditBoxVisible" :tempData="editTempData" @closeBox="closeTemplateAuditBox"/>
+        <TemplateEdit :is-visible="isEditBoxVisible" :tempData="tempData" @closeBox="closeTemplateEditBox"/>
+        <TemplateAudit :is-visible="isAuditBoxVisible" :auditData="auditData" @closeBox="closeTemplateAuditBox"/>
       </div>
     </div>
 </template>
@@ -71,7 +71,8 @@
           desc: '降序',
           form:{},
           tempList: [],
-          editTempData: 0,
+          tempData: 0,
+          auditData: {},
         }
       },
       methods:{
@@ -94,7 +95,6 @@
               if (res.success) {
                 let data = res.data;
                 thiz.tempList = data.list;
-                // thiz.page.total = thiz.templateList.length;
                 thiz.isLoad = false;
               } else {
                 if (res.code === 101){
@@ -115,17 +115,43 @@
           this.refreshTabData()
         },
 
+        // 模板编辑弹窗的方法
         templateEdit: function (index) {
-          this.editTempData = this.tempList[index];
+          this.tempData = this.tempList[index];
           this.isEditBoxVisible = true;
         },
         closeTemplateEditBox: function () {
           this.isEditBoxVisible = false;
         },
 
+        // 模板审核弹窗的方法
         templateAudit: function(index){
-          this.editTempData = this.tempList[index];
-          this.isAuditBoxVisible = true;
+          let thiz = this;
+          $.ajax({
+            url: thiz.preUrl + "getTemplateAuditList",
+            data:{
+              tempId: thiz.tempList[index].tempId
+            },
+            success: function (res) {
+              if(res.success){
+                thiz.auditData = thiz.tempList[index];
+                thiz.auditData.list = res.data.list || [];
+                if(res.data.list.length > 0) {
+                  thiz.auditData.status = res.data.list[0].status || 0;
+                }
+                else {
+                  thiz.auditData.status = 0;
+                }
+                thiz.isAuditBoxVisible = true;
+              }
+              else{
+                thiz.$message.error(res.msg);
+              }
+            },
+            error: function (res) {
+              thiz.$message.error("网络繁忙，请稍后重试");
+            }
+          });
         },
         closeTemplateAuditBox: function () {
           this.isAuditBoxVisible = false;
