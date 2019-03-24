@@ -22,6 +22,17 @@
             name: '',
           }
         }
+      },
+      methods: {
+        closeUploadFileBox: function () {
+          this.$emit("closeBox");
+        },
+        // 提交审核
+        submitFile: function () {
+          this.$message.info("提审~");
+          let thiz = this;
+
+        }
       }
     }
 </script>

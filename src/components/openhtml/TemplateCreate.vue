@@ -9,9 +9,9 @@
       </div>
       <div class="container">
         <div class="pic">
-          <img :src="form.imgUrl" alt="">
-          <span class="btn" v-if="!form.imgUrl">请设置封面图</span>
-          <span class="btn" v-else>更换封面图</span>
+          <img @click="showUploadFileBox"   :src="form.imgUrl" alt="">
+          <span @click="showUploadFileBox"   class="btn" v-if="!form.imgUrl">请设置封面图</span>
+          <span @click="showUploadFileBox"   class="btn" v-else>更换封面图</span>
         </div>
         <div class="content">
           <div class="item">
@@ -37,13 +37,20 @@
       </div>
     </div>
     <div class="mask" @click="closeCreateTemplateBox"></div>
+    <UploadFile :is-visible="isUpload" @closeBox="closeUploadFileBox"></UploadFile>
   </div>
 </template>
 
 <script>
+
+  import {COMM_MIXINS} from "../../api/comm/mixins"
+  import UploadFile from "../../components/openhtml/UploadFile";
+
     export default {
       name: "TemplateCreate",
+      components: {UploadFile},
       props: ["isVisible"],
+      mixins:  [COMM_MIXINS],
       data: function(){
         return{
           form: this.resetForm(),
@@ -51,6 +58,12 @@
         }
       },
       methods:{
+
+        closeUploadFileBox: function(imgUrl){
+          this.form.imgUrl = imgUrl;
+          this.isUpload = false;
+        },
+
         resetForm: function(){
           this.form = {
             title : '',
@@ -61,7 +74,6 @@
           };
           return this.form;
         },
-
         closeCreateTemplateBox: function () {
           this.$emit("closeBox", this.isCre);
         },

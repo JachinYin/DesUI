@@ -31,7 +31,7 @@
               <i class="el-icon-edit"></i>创建模板
             </span>
           </div>
-          <div class="item" v-for="(item, index) in tempList"@mouseover="hoverItem(index)" @mouseleave="leaveItem(index)">
+          <div class="item" v-for="(item, index) in tempList" @mouseover="hoverItem(index)" @mouseleave="leaveItem(index)">
             <img :src="item.imgUrl" alt="">
 
             <span class="btn" :id="item.tempId + '_e'" @click="templateEdit(index)" >
@@ -58,9 +58,9 @@
 
 <script>
     import Logout from "../../components/inc/Logout";
-    import TemplateEdit from "@/components/openhtml/TemplateEdit";
-    import TemplateAudit from "@/components/openhtml/TemplateAudit";
-    import TemplateCreate from "@/components/openhtml/TemplateCreate";
+    import TemplateEdit from "../../components/openhtml/TemplateEdit";
+    import TemplateAudit from "../../components/openhtml/TemplateAudit";
+    import TemplateCreate from "../../components/openhtml/TemplateCreate";
     export default {
       name: "Template",
       components: {TemplateCreate, TemplateAudit, TemplateEdit, Logout},
