@@ -2,15 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
+import router from './api/router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import './assets/icon/iconfont'
+import './api/icon/iconfont'
 
 import IconSvg from "./components/comm/IconSvg"
 
 // getCookie
-import CommTool from "./assets/CommJs";
+import CommTool from "./api/comm/CommJs";
 
 // 全局使用 Element
 Vue.use(ElementUI);
