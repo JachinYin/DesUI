@@ -75,6 +75,7 @@
         // 提交审核
         submitAudit: function () {
           this.$message.info("提审~");
+          let thiz = this;
 
         }
       },

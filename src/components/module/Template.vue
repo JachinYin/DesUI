@@ -49,6 +49,7 @@
           </div>
 
         </div>
+        <TemplateCreate :is-visible="isCreateBoxVisible" @closeBox="closeTemplateCreateBox"/>
         <TemplateEdit :is-visible="isEditBoxVisible" :tempData="tempData" @closeBox="closeTemplateEditBox"/>
         <TemplateAudit :is-visible="isAuditBoxVisible" :auditData="auditData" @closeBox="closeTemplateAuditBox"/>
       </div>
@@ -59,11 +60,13 @@
     import Logout from "../../components/inc/Logout";
     import TemplateEdit from "@/components/openhtml/TemplateEdit";
     import TemplateAudit from "@/components/openhtml/TemplateAudit";
+    import TemplateCreate from "@/components/openhtml/TemplateCreate";
     export default {
       name: "Template",
-      components: {TemplateAudit, TemplateEdit, Logout},
+      components: {TemplateCreate, TemplateAudit, TemplateEdit, Logout},
       data: function () {
         return{
+          isCreateBoxVisible : false,
           isEditBoxVisible : false,
           isAuditBoxVisible : false,
           time: '修改时间',
@@ -111,9 +114,15 @@
         },
 
         createTemplate: function () {
-          console.log("fas");
-          this.refreshTabData()
+          this.isCreateBoxVisible = true;
         },
+        closeTemplateCreateBox: function (isCre) {
+          if(isCre){
+            this.refreshTabData();
+          }
+          this.isCreateBoxVisible = false;
+        },
+
 
         // 模板编辑弹窗的方法
         templateEdit: function (index) {
