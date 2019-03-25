@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import Logout from "@/components/inc/Logout";
+    import Logout from "../../components/inc/Logout";
     export default {
         name: "MyInfo",
       components: {Logout},

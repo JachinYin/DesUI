@@ -88,7 +88,7 @@
           thiz.closeCreateTemplateBox();
           thiz.isCre = false;
           $.ajax({
-            url:this.preUrl + 'addTemplate',
+            url:this.preUrl + '/addTemplate',
             data:{
               aid : 1,
               title : thiz.form.title,
@@ -100,6 +100,7 @@
             success: function (res) {
               if(res.success){
                 thiz.$message.success(res.msg);
+                // 用来做判断，保证只有是创建模板成功之后，才会刷新模板列表
                 thiz.isCre = true;
                 thiz.closeCreateTemplateBox();
                 thiz.isCre = false;

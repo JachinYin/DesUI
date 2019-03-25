@@ -28,7 +28,7 @@
       props: ['isVisible'],
       data: function () {
         return{
-          imgUrl: '',
+          imgUrl: undefined,
         }
       },
       methods: {
@@ -42,7 +42,7 @@
           var formFile = new FormData();
           formFile.append("file", files);
           $.ajax({
-            url: thiz.preUrl + 'upload',//这里是请求后台的上传文件接口
+            url: thiz.preUrl + '/upload',//这里是请求后台的上传文件接口
             type: 'POST',
             dataType: 'json',
             cache: false,
@@ -51,7 +51,7 @@
             contentType: false,
             success: function(res){
               if (res.success) {
-                thiz.imgUrl = res.data.fileUrl;
+                thiz.imgUrl = thiz.preUrl + res.data.fileUrl;
                 thiz.closeUploadFileBox();
               }else{
                 thiz.$message.error(res.msg);
@@ -67,5 +67,7 @@
 </script>
 
 <style scoped>
-
+  .body{
+    height: 80px;
+  }
 </style>

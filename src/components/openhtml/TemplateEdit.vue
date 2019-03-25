@@ -59,7 +59,7 @@
         saveTemplate: function () {
           let thiz = this;
           $.ajax({
-            url:this.preUrl + 'setTemplate',
+            url:this.preUrl + '/setTemplate',
             data:{
               tempId : thiz.form.tempId,
               title : thiz.form.title,

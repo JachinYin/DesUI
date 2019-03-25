@@ -26,24 +26,29 @@
       <div class="main">
         <div class="content">
           <div class="item" @click="createTemplate">
-            <img src="../../assets/create1.png" alt="">
+            <div class="imgItem">
+              <img src="../../assets/create1.png" alt="">
+            </div>
             <span>
               <i class="el-icon-edit"></i>创建模板
             </span>
           </div>
           <div class="item" v-for="(item, index) in tempList" @mouseover="hoverItem(index)" @mouseleave="leaveItem(index)">
-            <img :src="item.imgUrl" alt="">
+            <div class="imgItem">
+              <img :src="item.imgUrl" alt="" v-if="item.imgUrl">
+              <span v-else style="line-height: 240px;color: #d6d6d6" class="tip">暂无封面</span>
+            </div>
 
-            <span class="btn" :id="item.tempId + '_e'" @click="templateEdit(index)" >
+            <span class="btn" @click="templateEdit(index)" >
               <span class="toolTip">编辑</span>
-              <i class="el-icon-edit-outline"></i>
+              <i class="el-icon-edit-outline" style="color: #006f00"></i>
             </span>
 
             <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-if="item.title.length<6">{{item.title}}</span>
             <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-else>{{item.title.slice(0,5)}}...</span>
 
-            <span class="btn" :id="item.tempId + '_c'" @click="templateAudit(index)">
-              <icon i-class="audit"></icon>
+            <span class="btn" @click="templateAudit(index)">
+              <icon i-class="audit" style="color: #939300"></icon>
               <span class="toolTip">提交</span>
             </span>
           </div>
@@ -83,7 +88,7 @@
           let thiz = this;
           let form = thiz.form;
           $.ajax({
-            url: thiz.preUrl + "getTemplateList",
+            url: thiz.preUrl + "/getTemplateList",
             type: 'get',
             data: {
               designer: form.designer,
@@ -137,7 +142,7 @@
         templateAudit: function(index){
           let thiz = this;
           $.ajax({
-            url: thiz.preUrl + "getTemplateAuditList",
+            url: thiz.preUrl + "/getTemplateAuditList",
             data:{
               tempId: thiz.tempList[index].tempId
             },
@@ -168,13 +173,13 @@
 
         hoverItem: function (index) {
           // alert(this.tempList[index]);
-          $("#" + this.tempList[index].tempId + '_e').css('display', 'inline-block');
-          $("#" + this.tempList[index].tempId + '_c').css('display', 'inline-block');
+          // $("#" + this.tempList[index].tempId + '_e').css('display', 'inline-block');
+          // $("#" + this.tempList[index].tempId + '_c').css('display', 'inline-block');
           $("#" + this.tempList[index].tempId + '_s').text("│");
         },
         leaveItem: function (index) {
-          $("#" + this.tempList[index].tempId + '_e').css('display', 'none');
-          $("#" + this.tempList[index].tempId + '_c').css('display', 'none');
+          // $("#" + this.tempList[index].tempId + '_e').css('display', 'none');
+          // $("#" + this.tempList[index].tempId + '_c').css('display', 'none');
           let title = this.tempList[index].title;
           title = title.length < 6 ? title : (title.slice(0,5) + '...');
           $("#" + this.tempList[index].tempId + '_s').text(title);
@@ -226,6 +231,7 @@
 
   /*创建模板内容===start*/
   .item{
+    position: relative;
     width: 180px;
     height: 275px;
     background: white;
@@ -235,19 +241,33 @@
     user-select: none;
     margin: 15px 20px;
     display: inline-block;
+    transition: top 1s ease;
   }
   .item:hover{
     /*color: #2b89fb;*/
     box-shadow: 4px 4px 12px 0 rgba(0, 0, 0, 0.2);
+    top: -2px;
   }
 
- .item img{
-   height: 240px;
+ .item .imgItem{
+   /*background: url('../../assets/create1.png');*/
    width: 180px;
+   height: 240px;
+   background: rgba(229, 229, 229, 0.2);
+   /*border: 1px rgba(0, 0, 0, 0.2) solid;*/
+   margin-bottom: 6px;
+   transition: filter 1s;
  }
- .item:hover  img{
-   /*width: 300px!important;*/
+ .item:hover  .imgItem{
    filter: blur(1px);
+ }
+ .item img{
+   width: 180px;
+   height: 240px;
+   border: none;
+ }
+ .item:hover .btn{
+   display: inline-block;
  }
  .item .btn{
    display: none;
