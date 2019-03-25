@@ -71,12 +71,31 @@
       methods:{
         closeTempAuditBox: function () {
           this.$emit("closeBox");
+          console.log(this.auditData);
         },
         // 提交审核
         submitAudit: function () {
-          this.$message.info("提审~");
           let thiz = this;
-
+          $.ajax({
+            url: thiz.preUrl + "/addTemplateAudit",
+            data:{
+              aid: thiz.auditData.aid,
+              tempId: thiz.auditData.tempId,
+              title: thiz.auditData.title,
+              status: 1,    // 对于设计师前台这边，只要是提交审核的，状态一律变为审核中
+            },
+            success: function (res) {
+              if(res.success){
+                thiz.$message.success(res.msg);
+                thiz.closeTempAuditBox();
+              }else{
+                thiz.$message.error(res.msg);
+              }
+            },
+            error: function () {
+              thiz.$message.error("网络繁忙，请稍后重试");
+            }
+          })
         }
       },
       created() {
