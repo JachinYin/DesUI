@@ -92,6 +92,7 @@
             info : this.tempData.info,
             imgUrl : this.tempData.imgUrl,
             content : this.tempData.content,
+            status : this.tempData.status,
           };
         },
       }
