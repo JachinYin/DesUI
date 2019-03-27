@@ -39,9 +39,13 @@
               <span v-else style="line-height: 240px;color: #d6d6d6" class="tip">暂无封面</span>
             </div>
 
-            <span class="btn" @click="templateEdit(index)" >
+            <span class="btn" @click="templateEdit(index)" v-if="item.status === 0 || item.status === 2">
               <span class="toolTip">编辑</span>
               <i class="el-icon-edit-outline" style="color: #006f00"></i>
+            </span>
+            <span class="btn" @click="templateEdit(index)" v-if="item.status === 1 || item.status === 3">
+              <span class="toolTip">查看</span>
+              <i class="el-icon-search" style="color: #006f00"></i>
             </span>
 
             <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-if="item.title.length<6">{{item.title}}</span>

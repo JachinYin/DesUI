@@ -11,7 +11,7 @@
         <div class="info">
           <div class="left">
             <img :src="auditData.imgUrl" alt="">
-            <div v-if="!auditData.imgUrl && auditData.status!==3" style="position: relative; top: -150px;color: rgba(255,0,0,0.59)">提醒：无封面<br>大概率无法通过审核</div>
+            <div v-if="!auditData.imgUrl && auditData.status!==3" style="position: relative; top: -150px;color: rgb(192,190,190)">提醒：无封面<br>大概率无法通过审核</div>
           </div>
           <div class="right">
             <div class="item">
@@ -165,7 +165,8 @@
     width: 300px;
     text-align: left;
     margin: auto;
-    border-radius: 10px 56px 10px 10px;
+    /*border-radius: 10px 56px 10px 10px;*/
+    border-radius: 2px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
   }
  .item{

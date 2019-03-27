@@ -16,19 +16,19 @@
         <div class="content">
           <div class="item">
             <span class="keyClass">标题</span>
-            <span class="valClass"><input type="text" v-model="form.title"></span>
+            <span class="valClass"><input type="text" v-model="form.title" :disabled="form.editable"></span>
           </div>
           <div class="item">
             <span class="keyClass">关键词</span>
-            <span class="valClass"><input type="text" v-model="form.keyWd"></span>
+            <span class="valClass"><input type="text" v-model="form.keyWd" :disabled="form.editable"></span>
           </div>
           <div class="item">
             <span class="keyClass">行业信息</span>
-            <span class="valClass"><input type="text" v-model="form.info"></span>
+            <span class="valClass"><input type="text" v-model="form.info" :disabled="form.editable"></span>
           </div>
           <div class="item">
             <span class="keyClass">内容</span>
-            <span class="valClass"><textarea v-model="form.content"></textarea></span>
+            <span class="valClass"><textarea v-model="form.content" :disabled="form.editable"></textarea></span>
           </div>
         </div>
       </div>
@@ -85,6 +85,7 @@
       },
       watch:{
         tempData(){
+          let status = this.tempData.status;
           this.form = {
             tempId : this.tempData.tempId,
             title : this.tempData.title,
@@ -92,7 +93,7 @@
             info : this.tempData.info,
             imgUrl : this.tempData.imgUrl,
             content : this.tempData.content,
-            status : this.tempData.status,
+            editable : status === 1 || status === 3,
           };
         },
       }
@@ -192,6 +193,9 @@
    outline: none;
    border: 1px #2b89fb solid;
    border-radius: 6px;
+ }
+ .item .valClass textarea:disabled, input:disabled {
+   background-color: #f2f2f2;
  }
 
   .footer{
