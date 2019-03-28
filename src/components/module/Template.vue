@@ -229,6 +229,7 @@
    overflow-y: auto;
    /*height: calc(100% - 900px);*/
    height: 600px;
+   margin-bottom: 10px;
  }
 
 
@@ -245,7 +246,7 @@
     user-select: none;
     margin: 15px 20px;
     display: inline-block;
-    transition: top 1s ease;
+    transition: top 4s ease;
   }
   .item:hover{
     /*color: #2b89fb;*/
