@@ -13,7 +13,7 @@
       name: "Home",
       components: {Navigation},
       created() {
-        // this.$router.push("/template");
+        this.$router.push("/template");
       }
     }
 </script>

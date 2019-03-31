@@ -12,7 +12,17 @@
           if(!confirm("确定退出？")){
             return;
           }
-          this.$router.push("/logout");
+          let that = this;
+          $.ajax({
+            url: that.preUrl + '/logout',
+            success: function (res) {
+              if(res.success)
+                that.$router.push("/");
+            },
+            error: function () {
+              that.$message.error("网络繁忙，请稍后重试~");
+            }
+          });
         }
       }
     }
