@@ -44,8 +44,6 @@
           $.ajax({
             url: thiz.preUrl + '/upload',//这里是请求后台的上传文件接口
             type: 'POST',
-            dataType: 'json',
-            cache: false,
             data: formFile,
             processData: false,
             contentType: false,

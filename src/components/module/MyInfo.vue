@@ -71,7 +71,7 @@
 
 <style scoped>
   .main{
-    padding: 0 50px ;
+    padding: 1px 50px ;
   }
   .belowTop{
     width:  80%;

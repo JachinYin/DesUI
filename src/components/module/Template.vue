@@ -100,7 +100,10 @@
               tempId: form.tempId || 0,
               time: form.time,
               title: form.title,
-              aid: 1,
+            },
+            beforeSend(xhr){
+              console.log("设置TOKEN");
+              xhr.setRequestHeader("TOKEN", thiz.$cookieUtil.getCookie("TOKEN"));
             },
             success: function (res) {
               console.log(res);
@@ -109,15 +112,11 @@
                 thiz.tempList = data.list;
                 thiz.isLoad = false;
               } else {
-                if (res.code === 101){
-                  thiz.$router.push('/login');
-                  return;
-                }
                 thiz.$message.error(res.msg);
               }
             },
             error: function (data) {
-              thiz.$message.error('【模板审核表】服务繁忙，请稍后重试');
+              thiz.$message.error("网络繁忙，请稍后重试~");
             }
           });
         },

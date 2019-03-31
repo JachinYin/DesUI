@@ -90,7 +90,7 @@
           $.ajax({
             url:this.preUrl + '/addTemplate',
             data:{
-              aid : 1,
+              // aid : 1, // aid 从后端拿取
               title : thiz.form.title,
               keyWd : thiz.form.keyWd,
               info : thiz.form.info,
