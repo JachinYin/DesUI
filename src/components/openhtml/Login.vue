@@ -21,13 +21,8 @@
           <el-form-item label="密码" @keyup.enter.native="login()">
             <el-input type="password" v-model="form.password"></el-input>
           </el-form-item>
-          <el-form-item>
-            <!--<el-checkbox-group v-model="form.rememberMe">-->
-            <el-checkbox label="记住我" v-model="form.rememberMe"></el-checkbox>
-            <!--</el-checkbox-group>-->
-            <!--<span>记住我</span>-->
-            <el-button type="primary" @click="login()">登 陆</el-button>
-          </el-form-item>
+
+          <el-button type="primary" @click="login()">登 陆</el-button>
         </el-form>
       </div>
       <div class="foot"><span>还没有账号？点击<span class="reg" @click="register">注册</span></span></div>
@@ -66,16 +61,14 @@
         $.ajax({
           url: thiz.preUrl + '/login',
           data:{
-            name: thiz.form.name,
+            userName: thiz.form.name,
             password: thiz.form.password,
-            rememberMe: thiz.form.rememberMe,
           },
+          type: 'post',
           success: function (res) {
             // 成功登陆
             if(res.success){
-
-              thiz.$router.push("/tempList");
-              console.log(document.cookie);
+              thiz.$router.push("/template");
             }
             // 登陆失败
             else{
@@ -94,12 +87,7 @@
         this.$router.push("/register")
       }
     },
-    created() {
-      let TOKEN = this.$CommTool.getCookie("TOKEN");
-      if(TOKEN !== ""){
-        this.$router.push("/tempList");
-      }
-    }
+    created() {}
   }
 </script>
 
@@ -169,7 +157,8 @@
     margin: auto;
   }
   .el-button{
-    /*width: 100%;*/
+    width: 100%;
+    margin-bottom: 20px;
   }
 
 </style>

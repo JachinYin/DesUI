@@ -5,6 +5,7 @@ import Template from '../../components/module/Template'
 import CashRecord from '../../components/module/CashRecord'
 import MyInfo from '../../components/module/MyInfo'
 import Login from '../../components/openhtml/Login'
+import Register from '../../components/openhtml/Register'
 
 
 Vue.use(Router);
@@ -30,16 +31,24 @@ export default new Router({
           path: '/myInfo',
           name: 'MyInfo',
           component: MyInfo,
-        },
-        {
-          path: '/login',
-          name: 'Login',
-          meta:{
-            requireAuth: true
-          },
-          component: Login
         }
       ]
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      meta:{
+        requireAuth: true
+      },
+      component: Register
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      meta:{
+        requireAuth: true
+      },
+      component: Login
     },
     {
       path: '/logout',
