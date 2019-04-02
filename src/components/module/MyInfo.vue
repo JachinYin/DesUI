@@ -1,6 +1,9 @@
 <template>
   <div class="myInfo">
-    <div class="header"><Logout/></div>
+    <div class="header">
+      <span class="editInfo" @click="$router.push('/editInfo')">修改资料</span>
+      <Logout/>
+    </div>
     <div class="main">
       <div class="below personal" style="">
         <div class="belowTop">
@@ -70,6 +73,17 @@
 </script>
 
 <style scoped>
+  .header .editInfo{
+    line-height: 70px;
+    padding: 0 50px;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .header .editInfo:hover{
+    color: #2b89fb;
+  }
+
+
   .main{
     padding: 1px 50px ;
   }

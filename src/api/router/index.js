@@ -6,6 +6,7 @@ import CashRecord from '../../components/module/CashRecord'
 import MyInfo from '../../components/module/MyInfo'
 import Login from '../../components/openhtml/Login'
 import Register from '../../components/openhtml/Register'
+import EditInfo from "../../components/module/EditInfo";
 
 
 Vue.use(Router);
@@ -31,6 +32,11 @@ export default new Router({
           path: '/myInfo',
           name: 'MyInfo',
           component: MyInfo,
+        },
+        {
+          path: '/editInfo',
+          name: 'MyInfo',
+          component: EditInfo,
         }
       ]
     },
