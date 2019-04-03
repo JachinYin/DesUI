@@ -35,7 +35,7 @@ export default new Router({
         },
         {
           path: '/editInfo',
-          name: 'MyInfo',
+          name: 'EditInfo',
           component: EditInfo,
         }
       ]
