@@ -148,10 +148,17 @@
     cursor: pointer;
   }
 
-  .mask{
-    background-color: rgba(143, 143, 143, 0.64);
+  /*mask*/
+  .mask {
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(48, 48, 48, 0.74);
+    z-index: 999;
+    opacity: 0.5;
   }
-
   .el-form{
     width: 250px;
     margin: auto;
