@@ -9,7 +9,7 @@
       </div>
       <div class="container">
         <div class="pic">
-          <img :src="form.imgUrl" alt="">
+          <img :src="preUrl+form.imgUrl" alt="">
           <span class="btn" v-if="!form.imgUrl">请设置封面图</span>
           <span class="btn" v-else>更换封面图</span>
         </div>

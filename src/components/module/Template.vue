@@ -35,7 +35,7 @@
           </div>
           <div class="item" v-for="(item, index) in tempList" @mouseover="hoverItem(index)" @mouseleave="leaveItem(index)">
             <div class="imgItem">
-              <img :src="item.imgUrl" alt="" v-if="item.imgUrl">
+              <img :src="preUrl+item.imgUrl" alt="" v-if="item.imgUrl">
               <span v-else style="line-height: 240px;color: #d6d6d6" class="tip">暂无封面</span>
             </div>
 

@@ -1,4 +1,4 @@
-export const COMM_MIXINS = {
+export const UPLOAD_MIXINS = {
   data: function () {
     return {
       isUpload: false,

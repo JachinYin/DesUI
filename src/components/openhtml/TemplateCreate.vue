@@ -9,9 +9,9 @@
       </div>
       <div class="container">
         <div class="pic">
-          <img @click="showUploadFileBox"   :src="form.imgUrl" alt="">
-          <span @click="showUploadFileBox"   class="btn" v-if="!form.imgUrl">请设置封面图</span>
-          <span @click="showUploadFileBox"   class="btn" v-else>更换封面图</span>
+          <img @click="showUploadFileBox" :src="preUrl+form.imgUrl" alt="">
+          <span @click="showUploadFileBox" class="btn" v-if="!form.imgUrl">请设置封面图</span>
+          <span @click="showUploadFileBox" class="btn" v-else>更换封面图</span>
         </div>
         <div class="content">
           <div class="item">
@@ -43,14 +43,14 @@
 
 <script>
 
-  import {COMM_MIXINS} from "../../api/comm/mixins"
+  import {UPLOAD_MIXINS} from "../../api/comm/mixins"
   import UploadFile from "../../components/openhtml/UploadFile";
 
     export default {
       name: "TemplateCreate",
       components: {UploadFile},
       props: ["isVisible"],
-      mixins:  [COMM_MIXINS],
+      mixins:  [UPLOAD_MIXINS],
       data: function(){
         return{
           form: this.resetForm(),

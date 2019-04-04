@@ -10,7 +10,7 @@
       <div class="container">
         <div class="info">
           <div class="left">
-            <img :src="auditData.imgUrl" alt="">
+            <img :src="preUrl+auditData.imgUrl" alt="">
             <div v-if="!auditData.imgUrl && auditData.status!==3" style="position: relative; top: -150px;color: rgb(192,190,190)">提醒：无封面<br>大概率无法通过审核</div>
           </div>
           <div class="right">
