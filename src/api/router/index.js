@@ -7,6 +7,7 @@ import MyInfo from '../../components/module/MyInfo'
 import Login from '../../components/openhtml/Login'
 import Register from '../../components/openhtml/Register'
 import EditInfo from "../../components/module/EditInfo";
+import NotFound from "../../components/NotFound";
 
 
 Vue.use(Router);
@@ -63,6 +64,11 @@ export default new Router({
         requireAuth: true
       },
       component: Home
-    }
+    },
+    {
+      path: '*',
+      name: '404',
+      component: NotFound
+    },
   ]
 })

@@ -61,7 +61,7 @@
     line-height: 20px;
     margin:  12px 0;
     font-size: 22px;
-    color: rgba(247, 247, 247);
+    color: rgba(247, 247, 247, 1);
   }
   img{
     position: relative;
