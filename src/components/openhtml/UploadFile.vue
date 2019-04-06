@@ -1,16 +1,6 @@
 <template>
   <div class="uploadFile openHtml" v-if="isVisible" v-cloak>
     <div class="body">
-      <!--这里是具体的弹窗内容，布局还有其他自定义-->
-      <!--<el-upload-->
-        <!--class="upload-file"-->
-        <!--drag-->
-        <!--:action="uploadUrl"-->
-        <!--accept="image/jpeg,image/gif,image/png,image/bmp"-->
-        <!--&gt;-->
-        <!--<i class="el-icon-upload"></i>-->
-        <!--<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
-      <!--</el-upload>-->
       <div class="abs">
         <div class="centerBox">
           <div class="icon">
@@ -30,7 +20,7 @@
 <script>
     export default {
       name: "UploadImage",
-      props: ['isVisible'],
+      props: ['isVisible', 'imgType'],
       data: function () {
         return{
           imgUrl: undefined,
@@ -38,6 +28,7 @@
       },
       methods: {
         closeUploadFileBox: function () {
+          console.log(this.imgType);
           this.$emit("closeBox", this.imgUrl);
         },
 
@@ -60,13 +51,10 @@
             }
           }
 
-
-
-
           let formFile = new FormData();
           formFile.append("file", files);
           $.ajax({
-            url: that.preUrl + '/upload',//这里是请求后台的上传文件接口
+            url: that.preUrl + '/upload/' + that.imgType,//这里是请求后台的上传文件接口
             type: 'POST',
             data: formFile,
             processData: false,
@@ -120,8 +108,6 @@
     height: 240px;
     opacity: 0;
   }
-
-
   .mask{
     z-index: 1000;
   }
