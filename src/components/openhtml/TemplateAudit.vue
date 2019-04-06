@@ -10,7 +10,9 @@
       <div class="container">
         <div class="info">
           <div class="left">
-            <img :src="preUrl+auditData.imgUrl" alt="">
+            <div class="img_box">
+              <div class="img" :style="auditData.imgUrl ? `background-image: url('${preUrl + auditData.imgUrl}')` : ''"></div>
+            </div>
             <div v-if="!auditData.imgUrl && auditData.status!==3" style="position: relative; top: -150px;color: rgb(192,190,190)">提醒：无封面<br>大概率无法通过审核</div>
           </div>
           <div class="right">
@@ -71,7 +73,6 @@
       methods:{
         closeTempAuditBox: function () {
           this.$emit("closeBox");
-          console.log(this.auditData);
         },
         // 提交审核
         submitAudit: function () {
@@ -146,11 +147,8 @@
     overflow-y: auto;
 
   }
-  .container img{
+  .container .img{
     margin: auto;
-    width: 180px;
-    height: 250px;
-    /*border: 1px red solid;*/
   }
   .container .btn{
     cursor: pointer;

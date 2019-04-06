@@ -25,9 +25,11 @@
       </div>
       <div class="main">
         <div class="content">
-          <div class="item" @click="createTemplate">
+          <div class="item" @click="createTemplate" style="cursor: pointer">
             <div class="imgItem">
-              <img src="../../assets/create1.png" alt="">
+              <div class="img_box">
+                <div class="img_c"></div>
+              </div>
             </div>
             <span>
               <i class="el-icon-edit"></i>创建模板
@@ -35,8 +37,9 @@
           </div>
           <div class="item" v-for="(item, index) in tempList" @mouseover="hoverItem(index)" @mouseleave="leaveItem(index)">
             <div class="imgItem">
-              <img :src="preUrl+item.imgUrl" alt="" v-if="item.imgUrl">
-              <span v-else style="line-height: 240px;color: #d6d6d6" class="tip">暂无封面</span>
+              <div class="img_box">
+                <div class="img" :style="item.imgUrl ? `background-image: url('${preUrl + item.imgUrl}')` : ''"></div>
+              </div>
             </div>
 
             <span class="btn" @click="templateEdit(index)" v-if="item.status === 0 || item.status === 2">
@@ -237,7 +240,7 @@
   .item{
     position: relative;
     width: 180px;
-    height: 275px;
+    height: 285px;
     background: white;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     border-radius: 4px;
@@ -254,21 +257,25 @@
   }
 
  .item .imgItem{
-   /*background: url('../../assets/create1.png');*/
    width: 180px;
-   height: 240px;
+   height: 250px;
    background: rgba(229, 229, 229, 0.2);
-   /*border: 1px rgba(0, 0, 0, 0.2) solid;*/
    margin-bottom: 6px;
    transition: filter 1s;
  }
  .item:hover  .imgItem{
    filter: blur(1px);
  }
- .item img{
+ .item .img, .item .img_c{
    width: 180px;
-   height: 240px;
-   border: none;
+   height: 250px;
+   background-repeat: no-repeat;
+   background-position: center center;
+   background-size: 100%;
+   vertical-align: middle;
+ }
+ .item .img_c{
+   background-image: url("../../assets/template_create.png");
  }
  .item:hover .btn{
    display: inline-block;

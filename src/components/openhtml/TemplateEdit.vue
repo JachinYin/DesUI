@@ -9,7 +9,9 @@
       </div>
       <div class="container">
         <div class="pic">
-          <img :src="preUrl+form.imgUrl" alt="">
+          <div class="img_box" @click="showUploadFileBox(tempType)">
+            <div class="img" :style="form.imgUrl ? `background-image: url('${preUrl + form.imgUrl}')` : ''"></div>
+          </div>
           <span class="btn" v-if="!form.imgUrl">请设置封面图</span>
           <span class="btn" v-else>更换封面图</span>
         </div>
@@ -37,13 +39,19 @@
       </div>
     </div>
     <div class="mask" @click="closeEditTemplateBox"></div>
+    <UploadFile :is-visible="isUpload" :img-type="imgType" @closeBox="closeUploadFileBox"></UploadFile>
   </div>
 </template>
 
 <script>
+    import {UPLOAD_MIXINS} from "@/api/comm/mixins";
+    import UploadFile from "../../components/openhtml/UploadFile";
+
     export default {
       name: "TemplateEdit",
       props: ["isVisible", "tempData"],
+      mixins: [UPLOAD_MIXINS],
+      components: {UploadFile},
       data: function(){
         return{
           form: {}
@@ -128,11 +136,9 @@
     height: 250px;
     margin: auto;
   }
-  .container img{
-    width: 180px;
-    height: 250px;
-    /*border: 1px black solid;*/
-  }
+ .img_box{
+   border: 1px #cfcfcf solid;
+ }
   .container .btn{
     cursor: pointer;
   }

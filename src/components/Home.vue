@@ -40,7 +40,18 @@
     /*height: 100%;*/
   }
 </style>
-
+<!--图片样式-->
+<style>
+  .img_box .img{
+    width: 180px;
+    height: 250px;
+    background-image: url("../assets/template_default.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+    vertical-align: middle;
+  }
+</style>
 
 <!--弹窗样式-->
 <style>

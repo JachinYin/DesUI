@@ -9,9 +9,11 @@
       </div>
       <div class="container">
         <div class="pic">
-          <img @click="showUploadFileBox" :src="preUrl+form.imgUrl" alt="">
-          <span @click="showUploadFileBox" class="btn" v-if="!form.imgUrl">请设置封面图</span>
-          <span @click="showUploadFileBox" class="btn" v-else>更换封面图</span>
+          <div class="img_box" @click="showUploadFileBox(tempType)">
+            <div class="img" :style="form.imgUrl ? `background-image: url('${preUrl + form.imgUrl}')` : ''"></div>
+          </div>
+          <span @click="showUploadFileBox(tempType)" class="btn" v-if="!form.imgUrl">请设置封面图</span>
+          <span @click="showUploadFileBox(tempType)" class="btn" v-else>更换封面图</span>
         </div>
         <div class="content">
           <div class="item">
@@ -37,7 +39,7 @@
       </div>
     </div>
     <div class="mask" @click="closeCreateTemplateBox"></div>
-    <UploadFile :is-visible="isUpload" @closeBox="closeUploadFileBox"></UploadFile>
+    <UploadFile :is-visible="isUpload" :img-type="imgType" @closeBox="closeUploadFileBox"></UploadFile>
   </div>
 </template>
 
@@ -124,7 +126,7 @@
    margin-top: 4px;
    height: 50px;
  }
- .header  .title{
+ .header .title{
    display: inline-block;
    line-height: 50px;
    /*font-weight: bold;*/
@@ -147,11 +149,9 @@
     height: 250px;
     margin: auto;
   }
-  .container img{
-    width: 180px;
-    height: 250px;
-    /*border: 1px black solid;*/
-  }
+ .img_box{
+   border: 1px #cfcfcf solid;
+ }
   .container .btn{
     cursor: pointer;
   }
