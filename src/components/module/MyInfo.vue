@@ -7,25 +7,51 @@
     <div class="main">
       <div class="below personal" style="">
         <div class="belowTop">
-          <div class="belowTopBg" style="background-image: url(http://12030782.s136i.faiusr.com/2/AIgBCAAQAhgAIK_al_QFKNSu-6UGMIASOIAS.jpg);"></div>
+          <div class="belowTopBg" :style="desData.photoImg ? `background-image: url('${preUrl + desData.photoImg}')` : ''"></div>
         </div>
         <div class="belowBelow">
-          <div class="tx" style="background-image: url(http://12030782.s136i.faiusr.com/2/AIgBCAAQAhgAIK_al_QFKNSu-6UGMIASOIAS.jpg)"></div>
-          <div class="name">受持读诵</div>
-          <div class="level"><div class="icon"></div>认证设计师™</div>
+          <div class="tx" :style="desData.photoImg ? `background-image: url('${preUrl + desData.photoImg}')` : ''"></div>
+          <div class="name">{{desData.nickName}}</div>
+          <div class="level" v-if="desData.status===3" @click="showCert">
+            <div class="icon"><icon i-class="badge"></icon>
+            </div>认证设计师
+          </div>
+          <div class="level" v-else @click="showCert">未认证</div>
           <div class="info">
             <div class="infoOne">所在地：&nbsp;&nbsp;
-              <div class="residence">中国&nbsp;&nbsp;北京&nbsp;&nbsp;北京</div>
+              <div class="residence">{{desData.country}} {{desData.province}} {{desData.city}} </div>
             </div>
           </div>
 
           <div class="resume">
             <div class="resumeOne">个人简介：</div>
-            <div class="resumeInfo">的重复三次</div>
+            <div class="resumeInfo">{{desData.intro}}</div>
           </div>
           <div class="infoTip">
-            个人资料暂不支持修改，如需修改请联系设计师小助理QQ：3190781479申请修改资料。
+            个人认证信息通过后不支持修改，如需修改认证信息请联系设计师小助理QQ：319xxxx479申请修改资料。
           </div>
+
+          <div class="cert" v-if="isShowCert">
+            <div class="auditList">
+              <div v-if="auditList.length === 0">暂无审核记录</div>
+              <div class="item" v-for="(item, index) in auditList">
+                <span v-if="item.status === 1">• 审核中
+                </span>
+                <span v-if="item.status === 2" style="color: #fd2814;">• 打回
+                </span>
+                <span v-if="item.status === 3" style="color: #41C26E;">• 通过
+                </span>
+                <span style="float: right" class="date">{{item.time}}</span>
+                <p style="text-indent: 1em" v-if="item.status === 1">请耐心等待审核结果</p>
+                <p style="text-indent: 1em" v-if="item.status === 2">{{item.reason}}</p>
+                <p style="text-indent: 1em" v-if="item.status === 3">审核已通过</p>
+              </div>
+            </div>
+            <br>
+            <el-button type="primary" size="mini" @click="onCert" v-if="desData.status===0||desData.status===2">发起审核</el-button>
+            <br><br>
+          </div>
+
         </div>
       </div>
 <!--      <div>
@@ -48,26 +74,93 @@
 <script>
     import Logout from "../../components/inc/Logout";
     export default {
-        name: "MyInfo",
+      name: "MyInfo",
       components: {Logout},
       data: function () {
         return{
-          form:{
-            id: 0,
-            name: '',
-          }
+          isShowCert: false, // 审核记录
+          desData:{},
+          auditList:[]
         }
       },
       methods: {
         closeUploadFileBox: function () {
           this.$emit("closeBox");
         },
-        // 提交审核
-        submitFile: function () {
-          this.$message.info("提审~");
-          let thiz = this;
+        // 显示审核信息
+        showCert: function(){
+          this.isShowCert = !this.isShowCert;
+          this.getAuditList();
+        },
+        // 发起认证
+        onCert: function(){
+          this.$confirm('请确保认证信息填写正确，再发起认证申请', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'info',
+            center: true
+          }).then(() => {
+            this.doCert();
+          }).catch(() => {});
+        },
+        // 发送认证ajax
+        doCert: function () {
+          let that = this;
+          $.ajax({
+            url: that.preUrl + '/addDesignerAudit',
+            data:{
+              nickName: that.desData.nickName
+            },
+            success: function (res) {
+              if(res.success){
+                that.$message.success(res.msg);
+                that.getDesData();
+                that.getAuditList();
+              }else{
+                that.$message.error(res.msg);
+              }
+            },
+            error: function () {
+              that.$message.error("网络繁忙，请稍后重试~");
+            }
+          });
+        },
 
+        // 获取设计师信息
+        getDesData(){
+          let that = this;
+          $.ajax({
+            url: that.preUrl + '/getDesignerInfo',
+            success: function(res){
+              if(res.success)
+                that.desData = res.data.desData;
+              else
+                that.$message.error(res.msg);
+            },
+            error: function(){
+              that.$message.error("网络繁忙，请稍后重试~");
+            }
+          });
+        },
+
+        getAuditList(){
+          let that = this;
+          $.ajax({
+            url: that.preUrl + '/getDesignerAuditList',
+            success: function(res){
+              if(res.success){
+                that.auditList = res.data.list;
+              }
+              else that.$message.error(res.msg);
+            },
+            error: function(){
+              that.$message.error("网络繁忙，请稍后重试~");
+            }
+          })
         }
+      },
+      created() {
+        this.getDesData();
       }
     }
 </script>
@@ -85,7 +178,7 @@
 
 
   .main{
-    padding: 1px 50px ;
+    padding: 1px 50px 50px;
   }
   .belowTop{
     width:  80%;
@@ -97,9 +190,8 @@
     border-radius: 4px 4px 0 0;
   }
   .belowTopBg{
-    width:  97%;
     height:  212px;
-    background-image: url(/image/manage/yellowSeaDragon.png?v=201901151635);
+    background-image: url(../../assets/user.png);
     background-repeat: no-repeat;
     background-size: cover;
     margin:-20px 0 0 -20px;
@@ -114,11 +206,12 @@
     height: 100px;
     margin-left: -50px;
     border-radius: 50%;
-    background-image: url(/image/manage/yellowSeaDragon.png?v=201901151635);
+    background-image: url(../../assets/user.png);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 100%;
     vertical-align: middle;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
   .belowBelow {
     width:  80%;
@@ -136,6 +229,7 @@
   }
 
   .belowBelow .level {
+    cursor: pointer;
     width: 127px;
     height:28px;
     line-height:  28px;
@@ -150,13 +244,9 @@
     user-select: none;
   }
   .belowBelow .level .icon{
-    width:13px;
-    height:13px;
-    background: url(/image/manage/thirdDesigner/authDesigner.svg?v=201901151658) no-repeat center center;
     position: absolute;
-    top: 50%;
-    margin-top: -6px;
-    left: 13px;
+    font-size: 24px;
+    left: 8px;
   }
 
   .belowBelow .residence {
@@ -191,5 +281,31 @@
     text-align:  center;
     font-size:  12px;
     color: #999;
+  }
+
+  .cert{
+    width: 500px;
+    margin: auto ;
+    text-align: center;
+  }
+
+  .auditList{
+    padding: 20px;
+    width: 300px;
+    text-align: left;
+    margin: auto;
+    /*border-radius: 10px 56px 10px 10px;*/
+    border-radius: 2px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
+  }
+
+  .item .date{
+    color: #cacaca;
+    margin-top: 6px;
+    font-size: 80%;
+  }
+  .item p{
+    color: #acacac;
+    font-size: 14px;
   }
 </style>

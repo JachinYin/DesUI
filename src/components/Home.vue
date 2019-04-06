@@ -32,6 +32,7 @@
 
   .right_box{
     margin-left: 220px;
+    background: #f2f2f2;
   }
   .main{
     padding: 50px;
