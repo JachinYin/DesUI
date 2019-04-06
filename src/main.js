@@ -23,7 +23,7 @@ Vue.config.productionTip = false;
 
 // 定义VUE全局变量"http://localhost:8088"
 Vue.prototype.preUrl = "http://localhost:8088";
-Vue.prototype.reg_Price = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+Vue.prototype.reg_Price = /^[1-9]\d*$/; // 取现只能取正整数
 
 
 /* eslint-disable no-new */

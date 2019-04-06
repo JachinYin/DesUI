@@ -1,31 +1,34 @@
 <template>
   <div class="cashRec">
-    <div class="header"><Logout/></div>
+    <div class="header">
+      <span @click="withdraw" class="opt_withdraw">提现</span>
+      <Logout/>
+    </div>
     <div class="main">
       <div class="center_box">
         <div class="countDetail detail" style="">
           <div class="countBox_wrap">
             <div class="countBox">
               <span class="title">可提现（元）</span>
-              <p class="countNum"><span style="color: #4e67ee;">40.0</span></p>
+              <p class="countNum"><span style="color: #4e67ee;">{{cashData.balance ? cashData.balance : 0}}</span></p>
             </div>
           </div>
           <div class="countBox_wrap">
             <div class="countBox">
               <span class="title">历史总收入（元）</span>
-              <p class="countNum"><span>90.0</span></p>
+              <p class="countNum"><span>{{cashData.totalPrice ? cashData.totalPrice: 0}}</span></p>
             </div>
           </div>
           <div class="countBox_wrap">
             <div class="countBox">
               <span class="title">通过模板数量</span>
-              <p class="countNum"><span>1</span></p>
+              <p class="countNum"><span>{{cashData.passTemplate ? cashData.passTemplate : 0}}</span></p>
             </div>
           </div>
         </div>
         <div class="cashDetail detail">
           <div class="cash_icon">账户明细</div>
-          <div class="zhtable">
+          <div class="cashFlowList">
             <div style="border-radius:3px;overflow:hidden;">
               <table cellspacing="0">
                 <tbody>
@@ -33,7 +36,7 @@
                   <th>流水(元)</th>
                   <th>结余(元)</th>
                   <th>变动类型</th>
-                  <th>服务内容</th>
+                  <th>模板ID</th>
                   <th>时间</th>
                 </tr>
                 </tbody>
@@ -41,59 +44,28 @@
             </div>
             <table id="accountDetail" cellspacing="0">
               <tbody>
-              <tr class="income">
-                <td>10.0</td>
-                <td>40.00</td>
-                <td>收入</td>
-                <td>哒柠</td>
-                <td>2019-03-20 10:54</td>
-              </tr>
-              <tr class="income">
-                <td>80.0</td>
-                <td>180.00</td>
-                <td>收入</td>
-                <td>哒柠</td>
-                <td>2019-03-19 17:10</td>
-              </tr>
-              <tr class="income">
-                <td>-100.0</td>
-                <td>100.00</td>
-                <td>收入</td>
-                <td>哒柠</td>
-                <td>2019-03-19 17:04</td>
-              </tr>
-              <tr class="income">
-                <td>100.0</td>
-                <td>100.00</td>
-                <td>收入</td>
-                <td>哒柠</td>
-                <td>2019-03-19 16:56</td>
-              </tr>
-              <tr class="income">
-                <td>-100.0</td>
-                <td>0.00</td>
-                <td>收入</td>
-                <td>噶gas</td>
-                <td>2018-11-26 20:29</td>
-              </tr>
-              <tr class="income">
-                <td>100.0</td>
-                <td>100.00</td>
-                <td>收入</td>
-                <td>噶gas</td>
-                <td>2018-11-26 20:29</td>
+              <tr :class="item.type===1 ? 'income' : 'expenditure'" v-for="(item) in list.slice(index, size)">
+                <td>{{item.price < 0 ? -item.price : item.price}}</td>
+                <td>{{item.balance}}</td>
+                <td>{{item.type === 1 ? '收入' : item.type === 2 ? '提现' : '打回'}}</td>
+                <td>{{item.tempId || ''}}</td>
+                <td>{{item.time}}</td>
               </tr>
               </tbody>
             </table>
           </div>
           <div id="pageContainer" class="pageContainer">
-            <a href="javascript:;" class="disablePageBtn" style="margin-right: 5px;">
-              <div class="prevPage"></div>
-            </a>
-            <a class="pageNum currentPageNum " page="1">1</a>
-            <a href="javascript:;" class="disablePageBtn">
-              <div class="nextPage"></div>
-            </a>
+            <div class="pageNav">
+              <el-pagination
+                @current-change="handleCurrentChange"
+                :current-page="page.currentPage"
+                :page-size="page.pageSize"
+                :total="page.total"
+                layout="prev, pager, next"
+                style="padding-top: 12px"
+              >
+              </el-pagination>
+            </div>
           </div>
         </div>
       </div>
@@ -102,14 +74,92 @@
 </template>
 
 <script>
-    import Logout from "@/components/inc/Logout";
-    export default {
-        name: "CashRecord",
-      components: {Logout}
+  import Logout from "@/components/inc/Logout";
+  import {Pagination_Mixins} from "@/api/comm/mixins";
+
+  export default {
+    name: "CashRecord",
+    components: {Logout},
+    mixins: [Pagination_Mixins],
+    data: function () {
+      return{
+        cashData: {},
+        list: [],
+      }
+    },
+    methods:{
+      // 发起提现
+      withdraw: function () {
+        this.$prompt('请输入提现金额', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: this.reg_Price,
+          inputErrorMessage: '金额格式不正确'
+        }).then(({value}) => {
+          this.doWithdraw(value);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消操作'
+          });
+        });
+      },
+      // 确定提现
+      doWithdraw: function(price){
+        let that = this;
+        $.ajax({
+          url: that.preUrl + '/withdraw',
+          data:{
+            price: price,
+          },
+          success: function(res){
+            if(res.success){
+              that.$message.success(res.msg);
+              that.getCashData();
+            }else{
+              that.$message.error(res.msg);
+            }
+          },
+          error: function(){
+            that.$message.error("网络繁忙，请稍后重试~");
+          }
+        })
+      },
+
+      // 获取账户明细信息
+      getCashData(){
+        let that = this;
+        $.ajax({
+          url: that.preUrl + '/getCashData',
+          success: function(res){
+            if(res.success){
+              that.cashData = res.data;
+              that.list = that.cashData.cashFlowList;
+              that.page.total = that.list.length;
+            }else that.$message.error(res.msg);
+          },
+          error: function(){}
+        })
+      },
+    },
+    created() {
+      this.getCashData();
     }
+
+  }
 </script>
 
 <style scoped>
+  .header .opt_withdraw{
+    line-height: 70px;
+    padding: 0 50px;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .header .opt_withdraw:hover{
+    color: #2b89fb;
+  }
+
   /*detail start*/
   .main{
     padding: 0 50px;
@@ -199,11 +249,11 @@
   }
   th {
     font-weight: normal;
-    width: 300px;
+    width: 135px;
     text-align: center;
   }
   td {
-    width: 300px;
+    width: 135px;
     text-align: center;
     font-size:14px;
     height: 44px;
@@ -216,6 +266,9 @@
   .income td:first-child{
     color: #09C16B;
   }
+  .expenditure td:first-child{
+    color: #c15c0d;
+  }
   .expenditure td:first-child:before {
     content: '-';
   }
@@ -223,17 +276,10 @@
     content: '+';
   }
 
-  /*pagecontainer*/
-  .disablePageBtn {
-    opacity: .5;
-    cursor: default;
-  }
-
   .pageContainer a {
     display: inline-block;
     text-decoration: none;
   }
-
   .pageContainer {
     text-align: center;
     font-size: 0;
@@ -242,98 +288,4 @@
     left:50%;
     transform: translateX(-50%);
   }
-
-  .pageSeparator {
-    width: 21px;
-    height: 21px;
-    line-height: 21px;
-    font-size: 12px;
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 5px;
-  }
-
-  .pageNum {
-    width: 21px;
-    height: 21px;
-    line-height: 21px;
-    font-size: 12px;
-    text-align: center;
-    color: #666;
-    display: inline-block;
-    vertical-align: top;
-    border: 1px solid #bfbfbf;
-    margin-right: 5px;
-    cursor: pointer;
-  }
-
-  .pageNum:hover {
-    width: 21px;
-    height: 21px;
-    line-height: 21px;
-    font-size: 12px;
-    text-align: center;
-    color: #666;
-    display: inline-block;
-    border: 1px solid #3164FF;
-    color: #3164FF;
-    margin-right: 5px;
-    cursor: pointer;
-  }
-
-  .currentPageNum {
-    border: 1px solid #3164FF;
-    background: #3164FF;
-    color: #fff;
-    cursor: default;
-  }
-
-  .currentPageNum:hover {
-    border: 1px solid #3164FF;
-    background: #3164FF;
-    color: #fff;
-    cursor: default;
-  }
-
-  .matCurrentPage {
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .prevPage {
-    width: 21px;
-    height: 21px;
-    background: url(/image/qt.png?v=201703241457) -333px -174px;
-    border: 1px solid #bfbfbf;
-  }
-
-  .disablePageBtn .prevPage:hover {
-    background: url(/image/qt.png?v=201703241457) -333px -174px;
-    border: 1px solid #bfbfbf;
-  }
-
-  .prevPage:hover {
-    background: url(/image/manage/thirdDesigner/slidehover.svg?v=201901211605) no-repeat 7px center;
-    border: 1px solid #3164FF;
-  }
-
-  .nextPage {
-    width: 21px;
-    height: 21px;
-    background: url(/image/qt.png?v=201703241457) -351px -174px;
-    border: 1px solid #bfbfbf;
-  }
-
-  .disablePageBtn .nextPage:hover {
-    background: url(/image/qt.png?v=201703241457) -351px -174px;
-    transform: rotate(0deg);
-    border: 1px solid #bfbfbf;
-  }
-
-  .nextPage:hover{
-    background: url(/image/manage/thirdDesigner/slidehover.svg?v=201901211605) no-repeat 7px center;
-    transform: rotate(180deg);
-    border: 1px solid #3164FF;
-  }
-  /*detail end*/
 </style>
