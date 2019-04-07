@@ -66,8 +66,11 @@
           },
           type: 'post',
           success: function (res) {
-            // let token = res.data.TOKEN;
-            // document.cookie = "TOKEN="+token;
+            let token = res.data.TOKEN;
+            document.cookie = "TOKEN="+token;
+            var storage=window.localStorage;
+            storage["token"]=token;
+            console.log(storage);
             // 成功登陆
             if(res.success){
               thiz.$router.push("/template");
@@ -78,8 +81,7 @@
             }
           },
           error: function (res) {
-            // thiz.$message.error("服务繁忙，请稍后重试");
-            thiz.$message.error(res.msg + "233");
+            thiz.$message.error("服务繁忙，请稍后重试");
             console.log(res);
           }
         })
