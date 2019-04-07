@@ -227,11 +227,8 @@
   /*头部排序===end*/
 
  .main .content{
-   /*display: grid;*/
    overflow-y: auto;
-   /*height: calc(100% - 900px);*/
-   height: 600px;
-   margin-bottom: 10px;
+   height: 620px;
  }
 
 

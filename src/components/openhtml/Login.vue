@@ -66,6 +66,8 @@
           },
           type: 'post',
           success: function (res) {
+            // let token = res.data.TOKEN;
+            // document.cookie = "TOKEN="+token;
             // 成功登陆
             if(res.success){
               thiz.$router.push("/template");
