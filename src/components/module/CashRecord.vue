@@ -1,7 +1,10 @@
 <template>
   <div class="cashRec">
     <div class="header">
-      <span @click="withdraw" class="opt_withdraw">提现</span>
+      <span @click="withdraw" class="opt_withdraw">
+        <icon i-class="withdraw"></icon>
+        提现
+      </span>
       <Logout/>
     </div>
     <div class="main">

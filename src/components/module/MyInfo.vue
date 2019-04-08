@@ -1,7 +1,10 @@
 <template>
   <div class="myInfo">
     <div class="header">
-      <span class="editInfo" @click="$router.push('/editInfo')">修改资料</span>
+      <span class="editInfo" @click="$router.push('/editInfo')">
+        <icon i-class="edit"></icon>
+        修改资料
+      </span>
       <Logout/>
     </div>
     <div class="main">
