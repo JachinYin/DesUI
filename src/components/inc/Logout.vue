@@ -16,8 +16,10 @@
           $.ajax({
             url: that.preUrl + '/logout',
             success: function (res) {
-              if(res.success)
+              if(res.success) {
+                that.$cookieUtil.setToken("");
                 that.$router.push("/");
+              }
             },
             error: function () {
               that.$message.error("网络繁忙，请稍后重试~");

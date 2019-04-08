@@ -39,8 +39,7 @@ $.ajaxSetup({
   dataType: "json",
   cache: false,
   beforeSend(xhr){
-    console.log("设置TOKEN");
-    xhr.setRequestHeader("TOKEN", cookieUtil.getCookie("TOKEN"));
+    xhr.setRequestHeader("TOKEN", cookieUtil.getToken("TOKEN"));
   },
   xhrFields: {
     withCredentials: true
@@ -57,7 +56,7 @@ $.ajaxSetup({
 
 router.beforeEach((to, from, next) => {
   if (!to.meta.requireAuth) {  // 判断该路由是否需要登录权限
-    if (cookieUtil.getCookie("TOKEN")) {  // 获取当前的token是否存在
+    if (cookieUtil.getToken("TOKEN")) {  // 获取当前的token是否存在
       next();
     }
     else {

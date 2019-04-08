@@ -105,16 +105,18 @@
               title: form.title,
             },
             beforeSend(xhr){
-              console.log("设置TOKEN");
-              xhr.setRequestHeader("TOKEN", thiz.$cookieUtil.getCookie("TOKEN"));
+              xhr.setRequestHeader("TOKEN", thiz.$cookieUtil.getToken("TOKEN"));
             },
             success: function (res) {
-              console.log(res);
               if (res.success) {
                 let data = res.data;
                 thiz.tempList = data.list;
                 thiz.isLoad = false;
               } else {
+                if (res.code === 101){
+                  thiz.$router.push('/login');
+                  return;
+                }
                 thiz.$message.error(res.msg);
               }
             },

@@ -66,14 +66,11 @@
           },
           type: 'post',
           success: function (res) {
-            let token = res.data.TOKEN;
-            document.cookie = "TOKEN="+token;
-            var storage=window.localStorage;
-            storage["token"]=token;
-            console.log(storage);
+            var storage= thiz.$cookieUtil.setToken(res.data.TOKEN);
             // 成功登陆
             if(res.success){
-              thiz.$router.push("/template");
+              let url = thiz.$route.query.redirect || '/template';
+              thiz.$router.push(url);
             }
             // 登陆失败
             else{
