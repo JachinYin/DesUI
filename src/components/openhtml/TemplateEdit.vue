@@ -3,13 +3,14 @@
     <div class="body">
       <div class="header">
         <div class="title">
-          <span style="padding-left: 26px">编 辑 模 板</span>
+          <span style="padding-left: 26px" v-if="form.editable">查 看 模 板</span>
+          <span style="padding-left: 26px" v-else>编 辑 模 板</span>
         </div>
         <span class="close_btn" @click="closeEditTemplateBox">&#10006;</span>
       </div>
       <div class="container">
         <div class="pic">
-          <div class="img_box" @click="showUploadFileBox(tempType)">
+          <div class="img_box" @click="!form.editable ? showUploadFileBox(tempType) : ''">
             <div class="img" :style="form.imgUrl ? `background-image: url('${preUrl + form.imgUrl}')` : ''"></div>
           </div>
           <span class="btn" v-if="!form.imgUrl">请设置封面图</span>
@@ -18,24 +19,24 @@
         <div class="content">
           <div class="item">
             <span class="keyClass">标题</span>
-            <span class="valClass"><input type="text" v-model="form.title" :disabled="form.editable"></span>
+            <span class="valClass"><input type="text" v-model="form.title" :readonly="form.editable"></span>
           </div>
           <div class="item">
             <span class="keyClass">关键词</span>
-            <span class="valClass"><input type="text" v-model="form.keyWd" :disabled="form.editable"></span>
+            <span class="valClass"><input type="text" v-model="form.keyWd" :readonly="form.editable"></span>
           </div>
           <div class="item">
             <span class="keyClass">行业信息</span>
-            <span class="valClass"><input type="text" v-model="form.info" :disabled="form.editable"></span>
+            <span class="valClass"><input type="text" v-model="form.info" :readonly="form.editable"></span>
           </div>
           <div class="item">
             <span class="keyClass">内容</span>
-            <span class="valClass"><textarea v-model="form.content" :disabled="form.editable"></textarea></span>
+            <span class="valClass"><textarea v-model="form.content" :readonly="form.editable"></textarea></span>
           </div>
         </div>
       </div>
       <div class="footer">
-        <el-button type="primary" size="small" @click="saveTemplate">保存</el-button>
+        <el-button type="primary" size="small" @click="saveTemplate" v-if="!form.editable">保存</el-button>
       </div>
     </div>
     <div class="mask" @click="closeEditTemplateBox"></div>
