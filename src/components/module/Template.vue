@@ -1,28 +1,43 @@
 <template>
     <div class="template">
       <div class="header">
-        <span class="search">
-          <select v-model="time">
-            <option>修改时间</option>
-            <option>创建时间</option>
-          </select>
-        </span>
-        <span class="search">
-          <select v-model="desc">
-            <option>降序</option>
-            <option>升序</option>
-          </select>
-        </span>
-        <span class="search">
-          <select v-model="status">
-            <option>全部</option>
-            <option>未提交</option>
-            <option>审核中</option>
-            <option>已打回</option>
-            <option>已通过</option>
-          </select></span>
+
+        <el-dropdown @command="onFilter" class="search" trigger="click">
+          <span class="el-dropdown-link select">
+            <span v-if="filter.status === -1">全部</span>
+            <span v-if="filter.status === 0">未提交</span>
+            <span v-if="filter.status === 1">审核中</span>
+            <span v-if="filter.status === 2" style="color: #fd2814">已打回</span>
+            <span v-if="filter.status === 3" style="color: #41c26e">已通过</span>
+
+            <i class="el-icon-arrow-down"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item :command="-1">全部</el-dropdown-item>
+            <el-dropdown-item :command="0">未提交</el-dropdown-item>
+            <el-dropdown-item :command="1">审核中</el-dropdown-item>
+            <el-dropdown-item :command="2">已打回</el-dropdown-item>
+            <el-dropdown-item :command="3">已通过</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-dropdown @command="onFilter2" class="search" trigger="click">
+          <span class="el-dropdown-link select">
+            <span v-if="filter.desc">降序</span>
+            <span v-else>升序</span>
+
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item :command="true">降序</el-dropdown-item>
+            <el-dropdown-item :command="false">升序</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <div style="display:inline-block;">
+          <el-input placeholder="请输入模板标题" v-model="filter.title" size="mini" @input="refreshTabData"></el-input>
+        </div>
+
         <Logout/>
-      </div>
+    </div>
       <div class="main">
         <div class="content">
           <div class="item" @click="createTemplate" style="cursor: pointer">
@@ -31,35 +46,38 @@
                 <div class="img_c"></div>
               </div>
             </div>
-            <span>
-              <i class="el-icon-edit"></i>创建模板
+            <span style="line-height: 35px">
+                <i class="el-icon-edit"></i>创建模板
             </span>
           </div>
-          <div class="item" v-for="(item, index) in tempList" @mouseover="hoverItem(index)" @mouseleave="leaveItem(index)">
+
+          <div class="item" v-for="(item, index) in tempList">
             <div class="imgItem">
               <div class="img_box">
                 <div class="img" :style="item.imgUrl ? `background-image: url('${preUrl + item.imgUrl}')` : ''"></div>
               </div>
             </div>
 
-            <span class="btn" @click="templateEdit(index)" v-if="item.status === 0 || item.status === 2">
-              <span class="toolTip">编辑</span>
-              <i class="el-icon-edit-outline" style="color: #006f00"></i>
-            </span>
-            <span class="btn" @click="templateEdit(index)" v-if="item.status === 1 || item.status === 3">
+            <div class="item_footer" style="box-sizing: border-box">
+              <span class="btn" @click="templateEdit(index)" v-if="item.status === 0 || item.status === 2">
+                <span class="toolTip">编辑</span>
+                <i class="el-icon-edit-outline" style="color: #006f00"></i>
+              </span>
+              <span class="btn" @click="templateEdit(index)" v-if="item.status === 1 || item.status === 3">
               <span class="toolTip">查看</span>
-              <i class="el-icon-search" style="color: #006f00"></i>
-            </span>
+                <i class="el-icon-search" style="color: #006f00"></i>
+              </span>
 
-            <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-if="item.title.length<6">{{item.title}}</span>
-            <span :id="item.tempId + '_s'" style="text-overflow: ellipsis" v-else>{{item.title.slice(0,5)}}...</span>
+              <span class="btn" @click="templateAudit(index)">
+                <icon i-class="audit" style="color: #939300"></icon>
+                <span class="toolTip">提交</span>
+              </span>
 
-            <span class="btn" @click="templateAudit(index)">
-              <icon i-class="audit" style="color: #939300"></icon>
-              <span class="toolTip">提交</span>
-            </span>
+              <span :id="item.tempId + '_s'" class="title" v-if="item.title.length<6">{{item.title}}</span>
+              <span :id="item.tempId + '_s'" class="title" v-else>{{item.title.slice(0,8)}}...</span>
+            </div>
+
           </div>
-
         </div>
         <TemplateCreate :is-visible="isCreateBoxVisible" @closeBox="closeTemplateCreateBox"/>
         <TemplateEdit :is-visible="isEditBoxVisible" :tempData="tempData" @closeBox="closeTemplateEditBox"/>
@@ -81,10 +99,11 @@
           isCreateBoxVisible : false,
           isEditBoxVisible : false,
           isAuditBoxVisible : false,
-          time: '修改时间',
-          status: '全部',
-          desc: '降序',
-          form:{},
+          filter:{
+            status: -1,
+            desc: true,
+            title: '',
+          },
           tempList: [],
           tempData: 0,
           auditData: {},
@@ -92,40 +111,50 @@
       },
       methods:{
         refreshTabData: function () {
-          let thiz = this;
-          let form = thiz.form;
+          let that = this;
           $.ajax({
-            url: thiz.preUrl + "/getTemplateList",
+            url: that.preUrl + "/getTemplateList",
             type: 'get',
             data: {
-              designer: form.designer,
-              status: form.status,
-              tempId: form.tempId || 0,
-              time: form.time,
-              title: form.title,
+              status: that.filter.status,
+              title: that.filter.title,
+              comp: that.filter.desc,
+              columns: 'time',
             },
             beforeSend(xhr){
-              xhr.setRequestHeader("TOKEN", thiz.$cookieUtil.getToken("TOKEN"));
+              xhr.setRequestHeader("TOKEN", that.$commUtil.getToken("TOKEN"));
             },
             success: function (res) {
               if (res.success) {
                 let data = res.data;
-                thiz.tempList = data.list;
-                thiz.isLoad = false;
+                that.tempList = data.list;
+                that.isLoad = false;
               } else {
                 if (res.code === 101){
-                  thiz.$router.push('/login');
+                  that.$router.push('/login');
                   return;
                 }
-                thiz.$message.error(res.msg);
+                that.$message.error(res.msg);
               }
             },
             error: function (data) {
-              thiz.$message.error("网络繁忙，请稍后重试~");
+              that.$message.error("网络繁忙，请稍后重试~");
             }
           });
         },
 
+        // 按状态筛选
+        onFilter: function(commend){
+          this.filter.status = commend;
+          this.refreshTabData();
+        },
+        // 排序
+        onFilter2: function(commend){
+          this.filter.desc = commend;
+          this.refreshTabData();
+        },
+
+        // 模板创建弹窗方法
         createTemplate: function () {
           this.isCreateBoxVisible = true;
         },
@@ -135,7 +164,6 @@
           }
           this.isCreateBoxVisible = false;
         },
-
 
         // 模板编辑弹窗的方法
         templateEdit: function (index) {
@@ -178,20 +206,6 @@
         closeTemplateAuditBox: function () {
           this.isAuditBoxVisible = false;
         },
-
-        hoverItem: function (index) {
-          // alert(this.tempList[index]);
-          // $("#" + this.tempList[index].tempId + '_e').css('display', 'inline-block');
-          // $("#" + this.tempList[index].tempId + '_c').css('display', 'inline-block');
-          $("#" + this.tempList[index].tempId + '_s').text("│");
-        },
-        leaveItem: function (index) {
-          // $("#" + this.tempList[index].tempId + '_e').css('display', 'none');
-          // $("#" + this.tempList[index].tempId + '_c').css('display', 'none');
-          let title = this.tempList[index].title;
-          title = title.length < 6 ? title : (title.slice(0,5) + '...');
-          $("#" + this.tempList[index].tempId + '_s').text(title);
-        }
       },
       created() {
         this.refreshTabData();
@@ -211,12 +225,15 @@
    text-align: center;
    user-select: none;
    line-height: 70px;
-   cursor: pointer;
    width: 100px;
    display: inline-block;
  }
- .search select{
+ .search .select:hover{
+   color: #2b89fb;
+ }
+ .search .select{
    /*width: 100px;*/
+   cursor: pointer;
    font-size: 16px;
    height: 70px;
    border: 0;
@@ -237,6 +254,7 @@
 
   /*创建模板内容===start*/
   .item{
+    box-sizing: border-box;
     position: relative;
     width: 180px;
     height: 285px;
@@ -259,7 +277,7 @@
    width: 180px;
    height: 250px;
    background: rgba(229, 229, 229, 0.2);
-   margin-bottom: 6px;
+   /*margin-bottom: 6px;*/
    transition: filter 1s;
  }
  .item:hover  .imgItem{
@@ -279,18 +297,32 @@
  .item:hover .btn{
    display: inline-block;
  }
+ .item .title{
+   line-height: 35px;
+ }
+ .item:hover .title{
+   display: none;
+ }
  .item .btn{
+   /*width: 60px;*/
    display: none;
    /*border: 1px #6666 solid;*/
-   line-height: 20px;
-   border-radius: 10%;
-   padding: 2px 4px;
+   line-height: 35px;
+   /*border-radius: 4px;*/
+   padding: 0 12px;
    cursor: pointer;
    color: #545454;
-   background: #eaeaea;
+   /*background: #eaeaea;*/
+ }
+ .item .btn:nth-child(2){
+   border-left: 1px #f2f2f2 solid;
  }
  .item .btn:hover{
-   opacity: 0.8;
+   /*opacity: 0.8;*/
+   color: #2b89fb;
+ }
+ .item_footer{
+   height: 35px;
  }
 
  /*创建模板内容===end*/
