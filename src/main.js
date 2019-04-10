@@ -11,7 +11,7 @@ import IconSvg from "./components/comm/IconSvg"
 
 // getCookie
 import cookieUtil from "./api/comm/CommJs";
-Vue.prototype.$cookieUtil = cookieUtil;
+Vue.prototype.$commUtil = cookieUtil;
 
 // 全局使用 Element
 Vue.use(ElementUI);

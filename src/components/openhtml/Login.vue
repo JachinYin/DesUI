@@ -27,7 +27,9 @@
       </div>
       <div class="foot"><span>还没有账号？点击<span class="reg" @click="register">注册</span></span></div>
     </div>
-    <div class="mask"></div>
+    <div class="mask">
+      <div class="img"></div>
+    </div>
   </div>
 </template>
 
@@ -66,7 +68,7 @@
           },
           type: 'post',
           success: function (res) {
-            var storage= thiz.$cookieUtil.setToken(res.data.TOKEN);
+            var storage= thiz.$commUtil.setToken(res.data.TOKEN);
             // 成功登陆
             if(res.success){
               let url = thiz.$route.query.redirect || '/template';
@@ -160,6 +162,21 @@
     z-index: 999;
     opacity: 0.5;
   }
+  .mask .img{
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/login_bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    /*background-size: 100%;*/
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+
   .el-form{
     width: 250px;
     margin: auto;
