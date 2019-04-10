@@ -75,25 +75,25 @@
         },
         // 提交审核
         submitAudit: function () {
-          let thiz = this;
+          let that = this;
           $.ajax({
-            url: thiz.preUrl + "/addTemplateAudit",
+            url: that.preUrl + "/addTemplateAudit",
             data:{
-              aid: thiz.auditData.aid,
-              tempId: thiz.auditData.tempId,
-              title: thiz.auditData.title,
+              aid: that.auditData.aid,
+              tempId: that.auditData.tempId,
+              title: that.auditData.title,
               status: 1,    // 对于设计师前台这边，只要是提交审核的，状态一律变为审核中
             },
             success: function (res) {
               if(res.success){
-                thiz.$message.success(res.msg);
-                thiz.closeTempAuditBox();
+                that.$message.success(res.msg);
+                that.closeTempAuditBox();
               }else{
-                thiz.$message.error(res.msg);
+                that.$message.error(res.msg);
               }
             },
             error: function () {
-              thiz.$message.error("网络繁忙，请稍后重试");
+              that.$message.error("网络繁忙，请稍后重试");
             }
           })
         }

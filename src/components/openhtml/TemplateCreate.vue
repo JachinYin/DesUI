@@ -81,39 +81,39 @@
         },
 
         addTemplate: function () {
-          let thiz = this;
-          if (thiz.form.title === '') {
+          let that = this;
+          if (that.form.title === '') {
             this.$message.error("标题不能为空");
             return;
           }
-          thiz.isCre = true;
-          thiz.closeCreateTemplateBox();
-          thiz.isCre = false;
+          that.isCre = true;
+          that.closeCreateTemplateBox();
+          that.isCre = false;
           $.ajax({
             url:this.preUrl + '/addTemplate',
             data:{
               // aid : 1, // aid 从后端拿取
-              title : thiz.form.title,
-              keyWd : thiz.form.keyWd,
-              info : thiz.form.info,
-              imgUrl : thiz.form.imgUrl,
-              content : thiz.form.content,
+              title : that.form.title,
+              keyWd : that.form.keyWd,
+              info : that.form.info,
+              imgUrl : that.form.imgUrl,
+              content : that.form.content,
             },
             success: function (res) {
               if(res.success){
-                thiz.$message.success(res.msg);
+                that.$message.success(res.msg);
                 // 用来做判断，保证只有是创建模板成功之后，才会刷新模板列表
-                thiz.isCre = true;
-                thiz.closeCreateTemplateBox();
-                thiz.isCre = false;
-                thiz.resetForm();
+                that.isCre = true;
+                that.closeCreateTemplateBox();
+                that.isCre = false;
+                that.resetForm();
               }
               else{
-                thiz.$message.error(res.msg);
+                that.$message.error(res.msg);
               }
             },
             error: function () {
-              thiz.$message.error("网络繁忙，请稍后重试~");
+              that.$message.error("网络繁忙，请稍后重试~");
             }
           })
         }

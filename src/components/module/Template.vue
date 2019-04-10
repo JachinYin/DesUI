@@ -176,30 +176,30 @@
 
         // 模板审核弹窗的方法
         templateAudit: function(index){
-          let thiz = this;
+          let that = this;
           $.ajax({
-            url: thiz.preUrl + "/getTemplateAuditList",
+            url: that.preUrl + "/getTemplateAuditList",
             data:{
-              tempId: thiz.tempList[index].tempId
+              tempId: that.tempList[index].tempId
             },
             success: function (res) {
               if(res.success){
-                thiz.auditData = thiz.tempList[index];
-                thiz.auditData.list = res.data.list || [];
+                that.auditData = that.tempList[index];
+                that.auditData.list = res.data.list || [];
                 if(res.data.list.length > 0) {
-                  thiz.auditData.status = res.data.list[0].status || 0;
+                  that.auditData.status = res.data.list[0].status || 0;
                 }
                 else {
-                  thiz.auditData.status = 0;
+                  that.auditData.status = 0;
                 }
-                thiz.isAuditBoxVisible = true;
+                that.isAuditBoxVisible = true;
               }
               else{
-                thiz.$message.error(res.msg);
+                that.$message.error(res.msg);
               }
             },
             error: function (res) {
-              thiz.$message.error("网络繁忙，请稍后重试");
+              that.$message.error("网络繁忙，请稍后重试");
             }
           });
         },

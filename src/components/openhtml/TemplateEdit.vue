@@ -66,28 +66,28 @@
         },
 
         saveTemplate: function () {
-          let thiz = this;
+          let that = this;
           $.ajax({
             url:this.preUrl + '/setTemplate',
             data:{
-              tempId : thiz.form.tempId,
-              title : thiz.form.title,
-              keyWd : thiz.form.keyWd,
-              info : thiz.form.info,
-              imgUrl : thiz.form.imgUrl,
-              content : thiz.form.content,
+              tempId : that.form.tempId,
+              title : that.form.title,
+              keyWd : that.form.keyWd,
+              info : that.form.info,
+              imgUrl : that.form.imgUrl,
+              content : that.form.content,
             },
             success: function (res) {
               if(res.success){
-                thiz.$message.success(res.msg);
-                thiz.closeEditTemplateBox();
+                that.$message.success(res.msg);
+                that.closeEditTemplateBox();
               }
               else{
-                thiz.$message.error(res.msg);
+                that.$message.error(res.msg);
               }
             },
             error: function () {
-              thiz.$message.error("网络繁忙，请稍后重试~");
+              that.$message.error("网络繁忙，请稍后重试~");
             }
           })
         }

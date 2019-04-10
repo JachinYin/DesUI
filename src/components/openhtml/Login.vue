@@ -59,28 +59,28 @@
           return;
         }
 
-        let thiz = this;
+        let that = this;
         $.ajax({
-          url: thiz.preUrl + '/login',
+          url: that.preUrl + '/login',
           data:{
-            userName: thiz.form.name,
-            password: thiz.form.password,
+            userName: that.form.name,
+            password: that.form.password,
           },
           type: 'post',
           success: function (res) {
-            var storage= thiz.$commUtil.setToken(res.data.TOKEN);
+            var storage= that.$commUtil.setToken(res.data.TOKEN);
             // 成功登陆
             if(res.success){
-              let url = thiz.$route.query.redirect || '/template';
-              thiz.$router.push(url);
+              let url = that.$route.query.redirect || '/template';
+              that.$router.push(url);
             }
             // 登陆失败
             else{
-              thiz.$message.error(res.msg);
+              that.$message.error(res.msg);
             }
           },
           error: function (res) {
-            thiz.$message.error("服务繁忙，请稍后重试");
+            that.$message.error("服务繁忙，请稍后重试");
             console.log(res);
           }
         })
