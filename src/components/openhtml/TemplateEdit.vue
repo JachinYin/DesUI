@@ -59,6 +59,11 @@
         }
       },
       methods:{
+        closeUploadFileBox: function(imgUrl){
+          this.form.imgUrl = imgUrl;
+          this.isUpload = false;
+        },
+
         closeEditTemplateBox: function () {
           this.$emit("closeBox");
         },

@@ -171,6 +171,7 @@
           this.isEditBoxVisible = true;
         },
         closeTemplateEditBox: function () {
+          this.refreshTabData()
           this.isEditBoxVisible = false;
         },
 
