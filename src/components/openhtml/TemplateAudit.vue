@@ -54,7 +54,7 @@
       <div class="footer">
         <el-button type="primary" size="small" v-if="auditData.status === 0" @click="submitAudit">提交审核</el-button>
         <el-button type="primary" size="small" v-if="auditData.status === 2" @click="submitAudit">重新提交审核</el-button>
-        <el-button type="primary" size="small" v-if="auditData.status === 3" @click="closeTempAuditBox">确认</el-button>
+        <el-button  size="small" v-if="auditData.status === 3" @click="closeTempAuditBox">关闭</el-button>
       </div>
     </div>
     <div class="mask" @click="closeTempAuditBox"></div>
