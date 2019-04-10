@@ -28,7 +28,6 @@
       },
       methods: {
         closeUploadFileBox: function () {
-          console.log(this.imgType);
           this.$emit("closeBox", this.imgUrl);
         },
 
@@ -40,13 +39,23 @@
           /*图片类型正则验证*/
           let imgStr = /\.(jpg|jpeg|png|bmp|BMP|JPG|PNG|JPEG)$/;
           if(!imgStr.test(files.name)) {
-            this.$message.error("文件不是图片类型");
+            this.$notify.error(
+              {
+                title: '错误',
+                message: "文件不是图片类型",
+                showClose: false
+              });
             return;
           } else {
             /*图片大小*/
             let imagSize = files.size;
             if(imagSize > (1024 * 1024 * maxSize)) {
-              this.$message.error("大小不能超过" + maxSize + "M");
+              this.$notify.error(
+                {
+                  title: '错误',
+                  message: "大小不能超过" + maxSize + "M",
+                  showClose: false
+                });
               return;
             }
           }
@@ -88,7 +97,7 @@
     padding: 20px;
   }
   .centerBox{
-    border: 2px #409EFF solid;
+    border: 2px #409EFF dotted;
     border-radius: 4px;
 
   }
@@ -100,7 +109,8 @@
   .centerBox .icon i{
     font-size: 100px;
   }
-  input:hover .icon{
+  input{
+    cursor: pointer;
   }
   .uploadImg{
     background: #f2f2f2;
