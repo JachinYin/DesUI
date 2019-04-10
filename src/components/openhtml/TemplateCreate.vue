@@ -183,7 +183,7 @@
    /*height: 30px;*/
    padding: 0 15px;
    line-height: 28px;
-   font-size: 18px;
+   font-size: 14px;
    border-radius: 25px 4px 25px 25px;
    border: 1px #cfcfcf solid;
    color: #666666;
@@ -205,7 +205,7 @@
    min-height: 80px;
    padding: 5px 15px;
    line-height: 28px;
-   font-size: 18px;
+   font-size: 14px;
    border-radius: 6px;
  }
  .item .valClass textarea:focus{

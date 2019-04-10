@@ -13,7 +13,6 @@
             <div class="img_box">
               <div class="img" :style="auditData.imgUrl ? `background-image: url('${preUrl + auditData.imgUrl}')` : ''"></div>
             </div>
-            <div v-if="!auditData.imgUrl && auditData.status!==3" style="position: relative; top: -150px;color: rgb(192,190,190)">提醒：无封面<br>大概率无法通过审核</div>
           </div>
           <div class="right">
             <div class="item">
@@ -37,7 +36,7 @@
         <div class="content">
           <div class="auditList">
             <div v-if="auditData.list.length === 0">暂无审核记录</div>
-            <div class="item" v-for="(item, index) in auditData.list">
+            <div class="item" v-for="item in auditData.list">
                 <span v-if="item.status === 1">• 审核中
                 </span>
                 <span v-if="item.status === 2" style="color: #fd2814;">• 打回
